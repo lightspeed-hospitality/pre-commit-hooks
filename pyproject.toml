@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pre-commit-hooks"
-version = "0.0.1"
+version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 include = [
