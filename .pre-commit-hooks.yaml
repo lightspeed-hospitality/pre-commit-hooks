@@ -24,7 +24,7 @@
 - id: hello-world
   name: hello world
   description: hello world
-  entry: pre_commit_hooks/hello-world.py
+  entry: pre_commit_hooks/hello_world.py
   language: script
   types: [text]
   stages: [commit, push, manual]
