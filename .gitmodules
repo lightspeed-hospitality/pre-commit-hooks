@@ -1,0 +1,3 @@
+[submodule "pre-commit-hooks"]
+	path = pre-commit-hooks
+	url = git@github.com:pre-commit/pre-commit-hooks.git
