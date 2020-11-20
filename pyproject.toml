@@ -7,6 +7,7 @@ include = ["pre_commit_hooks/*"]
 
 [tool.poetry.scripts]
 hello-world="pre_commit_hooks.hello_world:main"
+end-of-file-fixer="pre_commit_hooks.end_of_file_fixer:main"
 
 [tool.poetry.dependencies]
 python = "^3.7"

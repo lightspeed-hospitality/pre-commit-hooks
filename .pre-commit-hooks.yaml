@@ -24,15 +24,15 @@
 - id: hello-world
   name: hello world
   description: hello world
-  entry: pre_commit_hooks/hello_world.py
-  language: script
+  entry: hello-world
+  language: python
   types: [text]
   stages: [commit, push, manual]
 
 - id: end-of-file-fixer
   name: end of file fixer
   description: end of file fixer
-  entry: pre-commit-hooks/pre_commit_hooks/end_of_file_fixer.py
-  language: script
+  entry: end-of-file-fixer
+  language: python
   types: [text]
   stages: [commit, push, manual]

@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: git@github.com:lightspeed-hospitality/pre-commit-hooks.git
-    rev: 174dca1
+    rev: d08d09e419dc53899b8dd46004ec650157c32532
     hooks:
       - id: hello-world
       - id: end-of-file-fixer
