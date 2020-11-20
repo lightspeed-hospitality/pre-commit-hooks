@@ -28,3 +28,11 @@
   language: script
   types: [text]
   stages: [commit, push, manual]
+
+- id: end-of-file-fixer
+  name: end of file fixer
+  description: end of file fixer
+  entry: pre-commit-hooks/pre_commit_hooks/end_of_file_fixer.py
+  language: script
+  types: [text]
+  stages: [commit, push, manual]

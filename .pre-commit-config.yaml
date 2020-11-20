@@ -4,3 +4,4 @@ repos:
     rev: 174dca1
     hooks:
       - id: hello-world
+      - id: end-of-file-fixer
