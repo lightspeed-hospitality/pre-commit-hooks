@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 include = ["pre_commit_hooks/*"]
 
 [tool.poetry.scripts]
-hello-world="hooks.hello_world:main"
+hello-world="pre_commit_hooks.hello_world:main"
 
 [tool.poetry.dependencies]
 python = "^3.7"
