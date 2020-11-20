@@ -1,6 +1,9 @@
 ---
 repos:
   - repo: git@github.com:lightspeed-hospitality/pre-commit-hooks.git
-    rev: ac5d4ca
+    rev: dca2496
     hooks:
       - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: pretty-format-json
+      - id: requirements-txt-fixer
