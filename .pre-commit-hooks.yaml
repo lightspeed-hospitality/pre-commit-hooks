@@ -25,6 +25,6 @@
   name: hello world
   description: hello world
   entry: test
-  language: python
+  language: script
   types: [text]
   stages: [commit, push, manual]
