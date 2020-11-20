@@ -1,4 +1,10 @@
 #!/usr/bin/python
 
-if __name__ == "__main__":
+
+def main():
     print("hello world")
+    return 0
+
+
+if __name__ == "__main__":
+    exit(main())
