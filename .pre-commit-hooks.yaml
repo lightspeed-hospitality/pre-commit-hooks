@@ -36,3 +36,10 @@
   language: python
   types: [text]
   stages: [commit, push, manual]
+
+- id: pretty-format-json
+  name: Pretty format JSON
+  description: This hook sets a standard for formatting JSON files.
+  entry: pretty-format-json
+  language: python
+  types: [json]
