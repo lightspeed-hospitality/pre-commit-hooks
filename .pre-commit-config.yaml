@@ -1,6 +1,6 @@
 ---
 repos:
   - repo: git@github.com:lightspeed-hospitality/pre-commit-hooks.git
-    rev: 54232630637449b7f646c0a3cbda5c358b1e2818
+    rev: 9afb53edaac5c9aa8fe5feec3c2ac5e0649ebc40
     hooks:
       - id: hello-world
