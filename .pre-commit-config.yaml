@@ -3,4 +3,4 @@ repos:
   - repo: https://github.com/lightspeed-hospitality/pre-commit-hooks
     rev: c4e13cfb909edb050421664af24efa0d9a4e15c4
     hooks:
-      - id: end-of-file-fixer
+      - id: hello-world
