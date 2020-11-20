@@ -1,6 +1,7 @@
 ---
 repos:
   - repo: git@github.com:lightspeed-hospitality/pre-commit-hooks.git
-    rev: 174dca1
+    rev: e73bd99
     hooks:
-      - id: hello-world
+      - id: end-of-file-fixer
+      - id: trailing-whitespace

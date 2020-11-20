@@ -21,10 +21,32 @@
   pass_filenames: false
   always_run: true
 
-- id: hello-world
-  name: hello world
-  description: hello world
-  entry: pre_commit_hooks/hello_world.py
-  language: script
+- id: end-of-file-fixer
+  name: end of file fixer
+  description: end of file fixer
+  entry: end-of-file-fixer
+  language: python
   types: [text]
   stages: [commit, push, manual]
+
+- id: trailing-whitespace
+  name: Trim Trailing Whitespace
+  description: This hook trims trailing whitespace.
+  entry: trailing-whitespace-fixer
+  language: python
+  types: [text]
+  stages: [commit, push, manual]
+
+- id: pretty-format-json
+  name: Pretty format JSON
+  description: This hook sets a standard for formatting JSON files.
+  entry: pretty-format-json
+  language: python
+  types: [json]
+
+- id: requirements-txt-fixer
+  name: Fix requirements.txt
+  description: Sorts entries in requirements.txt
+  entry: requirements-txt-fixer
+  language: python
+  files: requirements.*\.txt$

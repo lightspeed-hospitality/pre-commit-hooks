@@ -3,10 +3,16 @@ name = "pre-commit-hooks"
 version = "0.0.1"
 description = ""
 authors = ["Your Name <you@example.com>"]
-include = ["pre_commit_hooks/*"]
+include = [
+  "pre_commit_hooks/*",
+  "submodule_pre_commit_hooks/pre_commit_hooks/*"
+]
 
 [tool.poetry.scripts]
-hello-world="pre_commit_hooks.hello_world:main"
+end-of-file-fixer="submodule_pre_commit_hooks.pre_commit_hooks.end_of_file_fixer:main"
+trailing-whitespace-fixer="submodule_pre_commit_hooks.pre_commit_hooks.trailing_whitespace_fixer:main"
+pretty-format-json="submodule_pre_commit_hooks.pre_commit_hooks.pretty_format_json:main"
+requirements-txt-fixer="submodule_pre_commit_hooks.pre_commit_hooks.requirements_txt_fixer:main"
 
 [tool.poetry.dependencies]
 python = "^3.7"
