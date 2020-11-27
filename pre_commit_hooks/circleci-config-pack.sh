@@ -20,4 +20,4 @@ if ! command -v circleci &>/dev/null; then
   exit 1
 fi
 
-circleci --skip-update-check config pack
+circleci --skip-update-check config pack .circleci/config > .circleci/config.yml
