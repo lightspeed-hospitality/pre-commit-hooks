@@ -15,7 +15,7 @@
   pass_filenames: false
 
 - id: poetry-pytest
-  name: CircleCI config validation
+  name: Pytest within poetry shell
   description: Use poetry to run pytest
   entry: pre_commit_hooks/poetry-pytest.sh
   language: script
