@@ -7,7 +7,7 @@ set -o nounset
 DEBUG=${DEBUG:=0}
 [[ $DEBUG -eq 1 ]] && set -o xtrace
 
-if [[ -n "${CI}" ]]; then
+if [[ -n "${CI:-}" ]]; then
   echo "Skipping config validation when running in CI."
   exit 0
 fi
