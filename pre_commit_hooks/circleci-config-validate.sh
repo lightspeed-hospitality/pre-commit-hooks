@@ -7,6 +7,11 @@ set -o nounset
 DEBUG=${DEBUG:=0}
 [[ $DEBUG -eq 1 ]] && set -o xtrace
 
+if [[ -n $CIRCLECI ]]; then
+  echo "Skipping config validation when running in CI."
+  exit 0
+fi
+
 echo 'Begin circleci config validation'
 
 if ! command -v circleci &>/dev/null; then
@@ -18,4 +23,8 @@ if ! command -v circleci &>/dev/null; then
   exit 1
 fi
 
-circleci --skip-update-check config validate
+if ! eMSG=$(circleci --skip-update-check config validate -c .circleci/config.yml); then
+	echo "CircleCI Configuration Failed Validation."
+	echo $eMSG
+	exit 1
+fi
