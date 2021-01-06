@@ -51,3 +51,10 @@
   entry: requirements-txt-fixer
   language: python
   files: requirements.*\.txt$
+
+- id: yamllint
+  name: yamllint
+  description: This hook runs yamllint.
+  entry: yamllint
+  language: python
+  types: [file, yaml]
