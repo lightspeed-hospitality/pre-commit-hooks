@@ -52,6 +52,14 @@
   language: python
   files: requirements.*\.txt$
 
+- id: google-java-code-format
+  name: Format Java with Google formatter
+  entry: pre_commit_hooks/google-java-code-format.sh
+  language: script
+  types: [ text ]
+  files: \.(java)$
+  stages: [commit, push, manual]
+
 - id: yamllint
   name: yamllint
   description: This hook runs yamllint.
