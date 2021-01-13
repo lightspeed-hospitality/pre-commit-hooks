@@ -59,6 +59,7 @@
   types: [ text ]
   files: \.(java)$
   stages: [commit, push, manual]
+  pass_filenames: false
 
 - id: yamllint
   name: yamllint
@@ -66,4 +67,4 @@
   entry: yamllint
   language: python
   types: [file, yaml]
-  pass_filenames: false
+
