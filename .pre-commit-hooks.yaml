@@ -59,7 +59,7 @@
   types: [ text ]
   files: \.(java)$
   stages: [commit, push, manual]
-  pass_filenames: false
+  require_serial: true
 
 - id: yamllint
   name: yamllint
