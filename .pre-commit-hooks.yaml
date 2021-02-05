@@ -68,3 +68,21 @@
   language: python
   types: [file, yaml]
 
+- id: shellcheck
+  name: Test shell scripts with shellcheck
+  description: Shell scripts conform to shellcheck
+  entry: submodule_syntaqx_git_hooks/hooks/shellcheck.sh
+  language: script
+  types: [shell]
+  exclude_types: [csh, perl, python, ruby, tcsh, zsh]
+  args: [-e, SC1091]
+  additional_dependencies: [shellcheck]
+
+- id: shfmt
+  name: Check shell style with shfmt
+  language: script
+  entry: submodule_syntaqx_git_hooks/hooks/shfmt.sh
+  types: [shell]
+  exclude_types: [csh, perl, python, ruby, tcsh, zsh]
+  args: ['-l', '-i', '2', '-ci']
+  additional_dependencies: [shfmt]
