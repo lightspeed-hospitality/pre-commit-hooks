@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Original: https://github.com/syntaqx/git-hooks
+# Forked to auto-install shfmt and give better command suggestions
 # Original: https://github.com/jumanjihouse/pre-commit-hooks#shfmt
 # Forked to change runtime to /usr/bin/env on win10
 set -eu
@@ -9,7 +11,11 @@ if [ "${DEBUG}" != unset ]; then
 fi
 
 if ! command -v shfmt >/dev/null 2>&1; then
-  echo 'This check needs shfmt from https://github.com/mvdan/sh/releases'
+  if command -v brew &>/dev/null; then
+    brew install shfmt
+  else
+    >&2 echo 'This check needs shfmt from https://github.com/mvdan/sh/releases or brew install shfmt'
+  fi
   exit 1
 fi
 
@@ -24,8 +30,8 @@ if [ -n "${output}" ]; then
   echo "${output}"
   echo
   echo 'The above files have style errors.'
-  echo 'Use "shfmt -d" option to show diff.'
-  echo 'Use "shfmt -w" option to write (autocorrect).'
+  echo "Use 'shfmt -d $@' option to show diff."
+  echo "Use 'shfmt -w $@' option to write (autocorrect)."
   exit 1
 else
   echo '[PASS]'
