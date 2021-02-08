@@ -1,3 +1,6 @@
 [submodule "pre-commit-hooks"]
 	path = submodule_pre_commit_hooks
 	url = git@github.com:pre-commit/pre-commit-hooks.git
+[submodule "submodule_syntaqx_git_hooks"]
+	path = submodule_syntaqx_git_hooks
+	url = git@github.com:syntaqx/git-hooks.git
