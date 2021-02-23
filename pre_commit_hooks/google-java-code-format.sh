@@ -4,11 +4,7 @@ FORMATTER_VERSION=1.9
 mkdir -p .cache
 pushd .cache > /dev/null
 
-JAVA_VERSION=$(java -version 2>&1 | head -1 | sed -E 's/.*version "([^"]+)"/\1/g')
-if [[ ${JAVA_VERSION} == 1.8* ]]; then
-    export FORMATTER_VERSION=1.7
-fi
-
+files_to_format="$(mktemp)"
 formatter_args=()
 for arg in "$@" ; do
     case "$arg" in
@@ -16,7 +12,7 @@ for arg in "$@" ; do
 	    FORMATTER_VERSION="$(echo $arg| sed 's/.*=//g')"
 	;;
 	*)
-	    formatter_args+=("$arg")
+	    echo "$arg" >> "${files_to_format}"
 	;;
     esac
 done
@@ -29,5 +25,4 @@ fi
 popd > /dev/null
 echo "Using formatter version ${FORMATTER_VERSION}"
 
-java -jar .cache/google-java-format-${FORMATTER_VERSION}-all-deps.jar --aosp --replace "$formatter_args"
-
+java -jar .cache/google-java-format-${FORMATTER_VERSION}-all-deps.jar --aosp --replace @${files_to_format}
