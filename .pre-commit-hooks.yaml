@@ -92,3 +92,11 @@
   entry: detect-secrets-hook
   args: ['--base64-limit', '4.5', '--hex-limit', '3']
   files: .*
+
+- id: xml-format
+  name: Format XML with Tidy
+  entry: pre_commit_hooks/xml-format.sh
+  language: script
+  types: [ text ]
+  files: \.(xml)$
+  stages: [commit, push, manual]
