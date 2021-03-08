@@ -10,15 +10,16 @@ if ! command -v tidy &>/dev/null; then
 fi
 
 tidy_config=$(mktemp)
-echo "indent: auto" >> $tidy_config
-echo "indent-spaces: 4" >> $tidy_config
-echo "output-xml: yes" >> $tidy_config
-echo "input-xml: yes" >> $tidy_config
-# Not sure if it should be limitless?
-echo "wrap: 0" >> $tidy_config
-echo "wrap-attributes: yes" >> $tidy_config
-echo "indent-attributes: yes" >> $tidy_config
-echo "vertical-space: yes" >> $tidy_config
+cat <<EOF > $tidy_config
+indent: auto
+indent-spaces: 4
+output-xml: yes
+input-xml: yes
+wrap: 0
+wrap-attributes: yes
+indent-attributes: yes
+vertical-space: yes
+EOF
 
 for xml_file in "${@}"; do
   tidy -quiet -config $tidy_config -o "$xml_file" "$xml_file"
