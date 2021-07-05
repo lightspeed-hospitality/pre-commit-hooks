@@ -17,7 +17,7 @@ requirements-txt-fixer="submodule_pre_commit_hooks.pre_commit_hooks.requirements
 [tool.poetry.dependencies]
 python = "^3.7"
 yamllint = "^v1.25.0"
-detect-secrets = "^0.14"
+detect-secrets = "^1.1.0"
 
 [tool.poetry.dev-dependencies]
 
