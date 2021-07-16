@@ -4,6 +4,11 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
+_PATH=$1
+if [ -z "${_PATH}" ]; then
+  _PATH=.circleci/config.yml
+fi
+
 DEBUG=${DEBUG:=0}
 [[ $DEBUG -eq 1 ]] && set -o xtrace
 
@@ -23,7 +28,7 @@ if ! command -v circleci &>/dev/null; then
   exit 1
 fi
 
-if ! eMSG=$(circleci --skip-update-check config validate -c .circleci/config.yml); then
+if ! eMSG=$(circleci --skip-update-check config validate -c "${_PATH}"); then
   echo "CircleCI Configuration Failed Validation."
   echo $eMSG
   exit 1
