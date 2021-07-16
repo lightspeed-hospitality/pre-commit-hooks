@@ -1,5 +1,10 @@
 #!/bin/bash -e
 
+_PATH=$1
+if [ -z "${_PATH}" ]; then
+  _PATH=.circleci/config.yml
+fi
+
 # do not run in Circle CI
 if [[ -n $CIRCLECI ]]; then
   echo "Only to be executed locally, as a pre-commit hook."
@@ -20,4 +25,4 @@ if ! command -v circleci &>/dev/null; then
   exit 1
 fi
 
-circleci --skip-update-check config pack .circleci/config > .circleci/config.yml
+circleci --skip-update-check config pack .circleci/config > "${_PATH}"
