@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pre-commit-hooks"
-version = "0.1.0"
+version = "0.7.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 include = [
@@ -17,7 +17,7 @@ requirements-txt-fixer="submodule_pre_commit_hooks.pre_commit_hooks.requirements
 [tool.poetry.dependencies]
 python = "^3.7"
 yamllint = "^v1.25.0"
-detect-secrets = "^1.1.0"
+detect-secrets = { git = "https://github.com/ibm/detect-secrets.git", tag = "0.13.1+ibm.45.dss" }
 
 [tool.poetry.dev-dependencies]
 
