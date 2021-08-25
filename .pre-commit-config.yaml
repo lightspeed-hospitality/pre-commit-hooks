@@ -1,7 +1,8 @@
 ---
 repos:
-  - repo: git@github.com:lightspeed-hospitality/pre-commit-hooks.git
-    rev: e73bd99
+  - repo: .
+    rev: v0.6.1
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
+      - id: circleci-config-validate
