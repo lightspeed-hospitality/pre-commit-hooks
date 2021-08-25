@@ -1,5 +1,5 @@
 ---
-version: 2
+version: 2.1
 orbs:
   lsk-python: lsk/python@1.2
 
