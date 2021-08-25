@@ -1,13 +1,10 @@
 ---
 version: 2
-jobs:
+orbs:
+  lsk-python: lsk/python@1.2
 
-  build:
-    docker:
-      - image: circleci/golang
-    steps:
-      - checkout
-      - run: go get -u mvdan.cc/sh/cmd/shfmt
-      - run: sudo apt-get -y install python-pip
-      - run: sudo pip install pre-commit
-      - run: pre-commit install
+workflows:
+  main:
+    jobs:
+      - lsk-python/pre-commit:
+          context: global
