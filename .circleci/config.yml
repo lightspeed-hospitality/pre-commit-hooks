@@ -8,3 +8,4 @@ workflows:
     jobs:
       - lsk-python/pre-commit:
           context: global
+          python-version: 3.9.4
