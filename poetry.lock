@@ -246,8 +246,8 @@ pyyaml = "*"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.9"
-content-hash = "c51a81d2562ca56758f06a256e57c93cb0e8b4787ac19855e3b3a0fc9ec15756"
+python-versions = "^3.7"
+content-hash = "1b9e51fa3089e5e6d3181b6ab95e300ee01e24201460ed9d7edb3b98b2502001"
 
 [metadata.files]
 attrs = [
