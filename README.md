@@ -41,6 +41,20 @@ Trims trailing whitespace.
   - By default, this hook trims all whitespace from the ends of lines.
     To specify a custom set of characters to trim instead, use `args: [--chars,"<chars to trim>"]`.
 
+### `detect-secrets`
+Scan for secrets committed into the repo.
+
+**Note**: Since detect secrets (on Yelp) seems to [not be maintained anymore](https://github.com/Yelp/detect-secrets/issues/473),
+we decided to use the [IBM fork](https://github.com/IBM/detect-secrets) since at least it's actively developed. Only issue is that it's
+relatively out of sync from the mainstream, but it should work fine for our needs.
+  - To generate a baseline of secrets:
+    - Install the correct version of detect-secrets:
+      ```console
+      python3 -m pip install --upgrade "git+https://github.com/ibm/detect-secrets.git@0.13.1+ibm.45.dss#egg=detect-secrets"
+      ```
+    - Run the baseline scan: `detect-secrets scan --base64-limit 4.5 --hex-limit 3  --update .secrets.baseline`
+  - Set `args: ['--baseline', '.secrets.baseline']` in your pre-commit config
+
 ## Configure `pre-commit`
 
 Create or append to your `.pre-commit-config.yaml` configuration:
