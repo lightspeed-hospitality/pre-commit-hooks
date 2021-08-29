@@ -17,10 +17,14 @@ for arg in "$@" ; do
     esac
 done
 
-if [ ! -f google-java-format-${FORMATTER_VERSION}-all-deps.jar ]
+FILE_NAME="google-java-format-${FORMATTER_VERSION}-all-deps.jar"
+
+if [ ! -f "${FILE_NAME}" ]
 then
-    curl -LJO "https://github.com/google/google-java-format/releases/download/google-java-format-${FORMATTER_VERSION}/google-java-format-${FORMATTER_VERSION}-all-deps.jar"
-    chmod 755 google-java-format-${FORMATTER_VERSION}-all-deps.jar
+    URL=$(curl "https://api.github.com/repos/google/google-java-format/releases" \
+	  | jq -r ".[]|select (.name == \"${FORMATTER_VERSION}\")|.assets[]| select (.name| contains(\"all-deps.jar\"))|.browser_download_url")
+    curl -LJO -o "${FILE_NAME}" "${URL}"
+    chmod 755 "${FILE_NAME}"
 fi
 popd > /dev/null
 echo "Using formatter version ${FORMATTER_VERSION}"
