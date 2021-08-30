@@ -22,7 +22,7 @@ FILE_NAME="google-java-format-${FORMATTER_VERSION}-all-deps.jar"
 if [ ! -f "${FILE_NAME}" ]
 then
     URL=$(curl "https://api.github.com/repos/google/google-java-format/releases" \
-	  | jq -r ".[]|select (.name == \"${FORMATTER_VERSION}\")|.assets[]| select (.name| contains(\"all-deps.jar\"))|.browser_download_url")
+      | jq -r ".[]|select (.name == \"${FORMATTER_VERSION}\")|.assets[]| select (.name| contains(\"all-deps.jar\"))|.browser_download_url")
     curl -LJO -o "${FILE_NAME}" "${URL}"
     chmod 755 "${FILE_NAME}"
 fi
