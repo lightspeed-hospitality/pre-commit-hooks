@@ -42,7 +42,7 @@
   description: flake8 - Python Code Formatter
   language: python
   entry: flake8
-  files: \.(py)$
+  files: \.py$
 
 - id: google-java-code-format
   name: Format Java with Google formatter
