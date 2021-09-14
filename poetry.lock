@@ -86,7 +86,7 @@ test = ["pytest (>=6.0)", "pytest-cov", "pytest-subtests", "pytest-xdist", "pret
 
 [[package]]
 name = "detect-secrets"
-version = "0.13.1+ibm.45.dss"
+version = "0.13.1+ibm.46.dss"
 description = "Tool for detecting secrets in the codebase"
 category = "main"
 optional = false
@@ -106,8 +106,8 @@ word_list = ["pyahocorasick"]
 [package.source]
 type = "git"
 url = "https://github.com/ibm/detect-secrets.git"
-reference = "0.13.1+ibm.45.dss"
-resolved_reference = "ec60c1ba9c09e47809dd618604f83f0c9dc75d0c"
+reference = "0.13.1+ibm.46.dss"
+resolved_reference = "01c2c6c47ce43f28ed077867be30d8e0cf59c74b"
 
 [[package]]
 name = "idna"
@@ -247,7 +247,7 @@ pyyaml = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "1b9e51fa3089e5e6d3181b6ab95e300ee01e24201460ed9d7edb3b98b2502001"
+content-hash = "3263962389ea1b2b14fba21fcfe4df6efaa1033f49c4c2f3a15cecb734591eb4"
 
 [metadata.files]
 attrs = [
