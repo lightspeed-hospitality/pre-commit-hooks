@@ -1,10 +1,10 @@
 ---
-- id: circleci-config-validate
-  name: CircleCI config validation
-  description: Test if the CircleCI config is well formed.
-  entry: pre_commit_hooks/circleci-config-validate.sh
-  language: script
-  files: ^.circleci/config.yml$
+- id: black
+  name: black
+  description: black - Python Code Formatter
+  language: python
+  entry: black
+  files: \.(py)$
 
 - id: circleci-config-pack
   name: CircleCI config pack
@@ -14,13 +14,20 @@
   files: ^.circleci/config/
   pass_filenames: false
 
-- id: poetry-pytest
-  name: Pytest within poetry shell
-  description: Use poetry to run pytest
-  entry: pre_commit_hooks/poetry-pytest.sh
+- id: circleci-config-validate
+  name: CircleCI config validation
+  description: Test if the CircleCI config is well formed.
+  entry: pre_commit_hooks/circleci-config-validate.sh
   language: script
-  pass_filenames: false
-  always_run: true
+  files: ^.circleci/config.yml$
+
+- id: detect-secrets
+  name: Detect secrets
+  description: Detects high entropy strings that are likely to be passwords.
+  language: python
+  entry: detect-secrets-hook
+  args: ["--base64-limit", "4.5", "--hex-limit", "3"]
+  files: .*
 
 - id: end-of-file-fixer
   name: end of file fixer
@@ -30,13 +37,39 @@
   types: [text]
   stages: [commit, push, manual]
 
-- id: trailing-whitespace
-  name: Trim Trailing Whitespace
-  description: This hook trims trailing whitespace.
-  entry: trailing-whitespace-fixer
+- id: flake8
+  name: flake8
+  description: flake8 - Python Code Formatter
   language: python
+  entry: flake8
+  files: \.py$
+
+- id: google-java-code-format
+  name: Format Java with Google formatter
+  entry: pre_commit_hooks/google-java-code-format.sh
+  language: script
   types: [text]
+  files: \.(java)$
   stages: [commit, push, manual]
+  require_serial: true
+
+- id: mypy
+  name: mypy
+  description: Executes static type checking for python
+  entry: mypy
+  language: python
+  'types': [python]
+  args: ["--ignore-missing-imports", "--scripts-are-modules"]
+  require_serial: true
+  additional_dependencies: []
+
+- id: poetry-pytest
+  name: Pytest within poetry shell
+  description: Use poetry to run pytest
+  entry: pre_commit_hooks/poetry-pytest.sh
+  language: script
+  pass_filenames: false
+  always_run: true
 
 - id: pretty-format-json
   name: Pretty format JSON
@@ -51,22 +84,6 @@
   entry: requirements-txt-fixer
   language: python
   files: requirements.*\.txt$
-
-- id: google-java-code-format
-  name: Format Java with Google formatter
-  entry: pre_commit_hooks/google-java-code-format.sh
-  language: script
-  types: [ text ]
-  files: \.(java)$
-  stages: [commit, push, manual]
-  require_serial: true
-
-- id: yamllint
-  name: yamllint
-  description: This hook runs yamllint.
-  entry: yamllint
-  language: python
-  types: [file, yaml]
 
 - id: shellcheck
   name: Test shell scripts with shellcheck
@@ -83,20 +100,27 @@
   entry: submodule_syntaqx_git_hooks/hooks/shfmt.sh
   types: [shell]
   exclude_types: [csh, perl, python, ruby, tcsh, zsh]
-  args: ['-l', '-i', '2', '-ci']
-
-- id: detect-secrets
-  name: Detect secrets
-  description: Detects high entropy strings that are likely to be passwords.
-  language: python
-  entry: detect-secrets-hook
-  args: ['--base64-limit', '4.5', '--hex-limit', '3']
-  files: .*
+  args: ["-l", "-i", "2", "-ci"]
 
 - id: tidy-xml-format
   name: Format XML with Tidy
   entry: pre_commit_hooks/tidy-xml-format.sh
   language: script
-  types: [ text ]
+  types: [text]
   files: \.(xml)$
   stages: [commit, push, manual]
+
+- id: trailing-whitespace
+  name: Trim Trailing Whitespace
+  description: This hook trims trailing whitespace.
+  entry: trailing-whitespace-fixer
+  language: python
+  types: [text]
+  stages: [commit, push, manual]
+
+- id: yamllint
+  name: yamllint
+  description: This hook runs yamllint.
+  entry: yamllint
+  language: python
+  types: [file, yaml]

@@ -12,5 +12,6 @@ if ! [ -x "$(command -v poetry)" ]; then
   exit 1
 fi
 
-# If validation fails, tell Git to stop and provide error message. Otherwise, continue.
-cd $PWD && poetry install -v && poetry run pytest -vv
+_PATH="$PWD/$1"
+echo "Running pytest in $_PATH"
+cd $PWD && poetry install -v && poetry run pytest "${_PATH}" -vv
