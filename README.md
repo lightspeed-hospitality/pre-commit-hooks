@@ -5,7 +5,7 @@
 
 A collection of useful git hooks for use with [pre-commit](https://pre-commit.com/).
 
-## Configure `pre-commit`
+## Use `pre-commit` in other repos
 
 Create or append to your `.pre-commit-config.yaml` configuration:
 
@@ -17,6 +17,21 @@ Create or append to your `.pre-commit-config.yaml` configuration:
   - id: circleci-config-validate
   - id: poetry-pytest
 ```
+
+### Test Changes
+
+Before publishing a new version (with a tag) you can test changes on this repository in other projects by using a commit SHA
+
+```yaml
+- repo: https://github.com/lightspeed-hospitality/pre-commit-hooks
+  rev: 4f707bc9dfeb75d70c4c37ebde63f8dc334f126d
+  hooks:
+  - id: circleci-config-pack
+  - id: circleci-config-validate
+  - id: poetry-pytest
+```
+
+`rev` can be either a tag or a commit SHA
 
 ## Available hooks
 
@@ -34,32 +49,9 @@ Create or append to your `.pre-commit-config.yaml` configuration:
 - `trailing-whitespace`: Trims trailing whitespace.
 - `yamllint`
 
-## Options
+### Options
 
-### `pretty-format-json`
-
-Checks that all your JSON files are pretty.  "Pretty"
-here means that keys are sorted and indented.  You can configure this with
-the following command-line options:
-
-- `--autofix` - automatically format json files
-- `--indent ...` - Control the indentation (either a number for a number of spaces or a string of whitespace).  Defaults to 2 spaces.
-- `--no-ensure-ascii` preserve unicode characters instead of converting to escape sequences
-- `--no-sort-keys` - when autofixing, retain the original key ordering (instead of sorting the keys)
-- `--top-keys comma,separated,keys` - Keys to keep at the top of mappings.
-
-### `trailing-whitespace`
-
-Trims trailing whitespace:
-
-- To preserve Markdown [hard line-breaks](https://github.github.com/gfm/#hard-line-break)
-  use `args: [--markdown-linebreak-ext=md]` (or other extensions used
-  by your markdown-files).  If for some reason you want to treat all files
-  as markdown, use `--markdown-linebreak-ext=*`.
-- By default, this hook trims all whitespace from the ends of lines.
-    To specify a custom set of characters to trim instead, use `args: [--chars,"<chars to trim>"]`.
-
-### `detect-secrets`
+#### `detect-secrets`
 
 Scan for secrets committed into the repo.
 
@@ -76,3 +68,26 @@ relatively out of sync from the mainstream, but it should work fine for our need
 
   - Run the baseline scan: `detect-secrets scan --base64-limit 4.5 --hex-limit 3  --update .secrets.baseline`
 - Set `args: ['--baseline', '.secrets.baseline']` in your pre-commit config
+
+#### `pretty-format-json`
+
+Checks that all your JSON files are pretty.  "Pretty"
+here means that keys are sorted and indented.  You can configure this with
+the following command-line options:
+
+- `--autofix` - automatically format json files
+- `--indent ...` - Control the indentation (either a number for a number of spaces or a string of whitespace).  Defaults to 2 spaces.
+- `--no-ensure-ascii` preserve unicode characters instead of converting to escape sequences
+- `--no-sort-keys` - when autofixing, retain the original key ordering (instead of sorting the keys)
+- `--top-keys comma,separated,keys` - Keys to keep at the top of mappings.
+
+#### `trailing-whitespace`
+
+Trims trailing whitespace:
+
+- To preserve Markdown [hard line-breaks](https://github.github.com/gfm/#hard-line-break)
+  use `args: [--markdown-linebreak-ext=md]` (or other extensions used
+  by your markdown-files).  If for some reason you want to treat all files
+  as markdown, use `--markdown-linebreak-ext=*`.
+- By default, this hook trims all whitespace from the ends of lines.
+    To specify a custom set of characters to trim instead, use `args: [--chars,"<chars to trim>"]`.

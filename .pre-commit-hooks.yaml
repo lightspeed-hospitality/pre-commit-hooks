@@ -44,7 +44,7 @@
   description: Executes static type checking for python
   language: python
   entry: mypy
-  files: \.($
+  files: \.(py)$
 
 - id: poetry-pytest
   name: Pytest within poetry shell
