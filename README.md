@@ -18,6 +18,8 @@ Create or append to your `.pre-commit-config.yaml` configuration:
   - id: poetry-pytest
 ```
 
+## Release a new version
+
 ### Test Changes
 
 Before publishing a new version (with a tag) you can test changes on this repository in other projects by using a commit SHA
@@ -32,6 +34,10 @@ Before publishing a new version (with a tag) you can test changes on this reposi
 ```
 
 `rev` can be either a tag or a commit SHA
+
+### Create a new Tag/Release
+
+Create a new git tag with the new version and [create a release based on the tag](https://github.com/lightspeed-hospitality/pre-commit-hooks/releases/new).
 
 ## Available hooks
 
