@@ -57,8 +57,10 @@
   name: mypy
   description: Executes static type checking for python
   language: python
-  entry: mypy
-  files: \.(py)$
+  'types': [python]
+  args: ["--ignore-missing-imports", "--scripts-are-modules"]
+  require_serial: true
+  additional_dependencies: []
 
 - id: poetry-pytest
   name: Pytest within poetry shell
