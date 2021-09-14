@@ -142,7 +142,7 @@ test = ["pytest (>=6.0)", "pytest-cov", "pytest-subtests", "pytest-xdist", "pret
 
 [[package]]
 name = "detect-secrets"
-version = "0.13.1+ibm.45.dss"
+version = "0.13.1+ibm.46.dss"
 description = "Tool for detecting secrets in the codebase"
 category = "main"
 optional = false
@@ -162,8 +162,8 @@ word_list = ["pyahocorasick"]
 [package.source]
 type = "git"
 url = "https://github.com/ibm/detect-secrets.git"
-reference = "0.13.1+ibm.45.dss"
-resolved_reference = "ec60c1ba9c09e47809dd618604f83f0c9dc75d0c"
+reference = "0.13.1+ibm.46.dss"
+resolved_reference = "01c2c6c47ce43f28ed077867be30d8e0cf59c74b"
 
 [[package]]
 name = "flake8"
@@ -501,7 +501,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "5f54c7373d5261db299898c06f8e6324946e96a59e76d1364bb33124702abde9"
+content-hash = "7a34b2c0cbeb8c9a9ad1950543b7a25ae9a79ee332ea55879eb87691deb5506f"
 
 [metadata.files]
 atomicwrites = [
