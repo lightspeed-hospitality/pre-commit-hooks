@@ -20,6 +20,8 @@ yamllint = "^v1.25.0"
 detect-secrets = { git = "https://github.com/ibm/detect-secrets.git", tag = "0.13.1+ibm.45.dss" }
 mypy = "^0.910"
 pytest = "^6.2.5"
+black = "^21.9b0"
+flake8 = "^3.9.2"
 
 [tool.poetry.dev-dependencies]
 

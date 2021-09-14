@@ -35,10 +35,12 @@ Before publishing a new version (with a tag) you can test changes on this reposi
 
 ## Available hooks
 
+- `black`: Python Code Formatter
 - `circleci-config-validate`: Test if the CircleCI config file is well formed.
 - `circleci-config-pack`: Pack the CircleCI config and build the config.yml
 - `detect-secrets`: Scan for secrets committed into the repo
 - `end-of-file-fixer`: Checks that all your JSON files are pretty.
+- `flake8`: Tool For Style Guide Enforcement
 - `google-java-code-format`
 - `poetry-pytest`: Use poetry to create a virtual-env and run pytest
 - `pretty-format-json`: Checks that all your JSON files are pretty.

@@ -1,4 +1,11 @@
 ---
+- id: black
+  name: black
+  description: black - Python Code Formatter
+  language: python
+  entry: black
+  files: \.(py)$
+
 - id: circleci-config-pack
   name: CircleCI config pack
   description: Pack the config, creating the config.yml file
@@ -29,6 +36,13 @@
   language: python
   types: [text]
   stages: [commit, push, manual]
+
+- id: flake8
+  name: flake8
+  description: flake8 - Python Code Formatter
+  language: python
+  entry: flake8
+  files: \.(py)$
 
 - id: google-java-code-format
   name: Format Java with Google formatter
