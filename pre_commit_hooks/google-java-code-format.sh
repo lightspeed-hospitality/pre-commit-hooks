@@ -29,7 +29,7 @@ fi
 popd > /dev/null
 echo "Using formatter version ${FORMATTER_VERSION}"
 
-JAVA_VERSION=$(java -version 2>&1 | grep -i version | gsed -E 's/.*version "([^"]+)".*/\1/; 1q')
+JAVA_VERSION=$(java -version 2>&1 | grep -i version | sed -E 's/.*version "([^"]+)".*/\1/; 1q')
 case "${JAVA_VERSION}" in
     1.8.*)
     MODULE_OPTIONS=""
