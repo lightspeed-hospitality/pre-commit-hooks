@@ -29,4 +29,17 @@ fi
 popd > /dev/null
 echo "Using formatter version ${FORMATTER_VERSION}"
 
-java -jar .cache/google-java-format-${FORMATTER_VERSION}-all-deps.jar --aosp --replace @${files_to_format}
+JAVA_VERSION=$(java -version 2>&1 | grep -i version | sed -E 's/.*version "([^"]+)".*/\1/; 1q')
+case "${JAVA_VERSION}" in
+    1.8.*)
+    MODULE_OPTIONS=""
+    ;;
+    *)
+    MODULE_OPTIONS="  --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
+    MODULE_OPTIONS+=" --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED"
+    MODULE_OPTIONS+=" --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED"
+    MODULE_OPTIONS+=" --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED"
+    MODULE_OPTIONS+=" --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
+    ;;
+esac
+java ${MODULE_OPTIONS} -jar .cache/google-java-format-${FORMATTER_VERSION}-all-deps.jar --aosp --replace @${files_to_format}
