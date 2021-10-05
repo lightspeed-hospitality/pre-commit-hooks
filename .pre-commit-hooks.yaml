@@ -20,6 +20,14 @@
   entry: isort
   files: \.(py)$
 
+- id: pylint
+  name: pylint
+  description: pylint - It's not just a linter that annoys you!
+  language: python
+  entry: pylint
+  files: \.(py)$
+  require_serial: true
+
 - id: circleci-config-pack
   name: CircleCI config pack
   description: Pack the config, creating the config.yml file
