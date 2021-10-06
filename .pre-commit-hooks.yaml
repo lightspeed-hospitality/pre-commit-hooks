@@ -6,28 +6,6 @@
   entry: black
   files: \.(py)$
 
-- id: flake8
-  name: flake8
-  description: flake8 - Python style guide enforcement
-  language: python
-  entry: flake8
-  files: \.py$
-
-- id: isort
-  name: isort
-  description: isort - Sorting Python imports
-  language: python
-  entry: isort
-  files: \.(py)$
-
-- id: pylint
-  name: pylint
-  description: pylint - It's not just a linter that annoys you!
-  language: python
-  entry: pylint
-  files: \.(py)$
-  require_serial: true
-
 - id: circleci-config-pack
   name: CircleCI config pack
   description: Pack the config, creating the config.yml file
@@ -59,6 +37,13 @@
   types: [text]
   stages: [commit, push, manual]
 
+- id: flake8
+  name: flake8
+  description: flake8 - Python style guide enforcement
+  language: python
+  entry: flake8
+  files: \.py$
+
 - id: google-java-code-format
   name: Format Java with Google formatter
   entry: pre_commit_hooks/google-java-code-format.sh
@@ -67,6 +52,13 @@
   files: \.(java)$
   stages: [commit, push, manual]
   require_serial: true
+
+- id: isort
+  name: isort
+  description: isort - Sorting Python imports
+  language: python
+  entry: isort
+  files: \.(py)$
 
 - id: mypy
   name: mypy
@@ -92,6 +84,14 @@
   entry: pretty-format-json
   language: python
   types: [json]
+
+- id: pylint
+  name: pylint
+  description: pylint - It's not just a linter that annoys you!
+  language: python
+  entry: pylint
+  files: \.(py)$
+  require_serial: true
 
 - id: requirements-txt-fixer
   name: Fix requirements.txt
