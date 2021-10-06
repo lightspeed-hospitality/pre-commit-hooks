@@ -46,8 +46,9 @@ Create a new git tag with the new version and [create a release based on the tag
 - `circleci-config-pack`: Pack the CircleCI config and build the config.yml
 - `detect-secrets`: Scan for secrets committed into the repo
 - `end-of-file-fixer`: Checks that all your JSON files are pretty.
-- `flake8`: Tool For Style Guide Enforcement
+- `flake8`: Tool For Python Style Guide Enforcement
 - `google-java-code-format`
+- `isort`: Python import sorting
 - `poetry-pytest`: Use poetry to create a virtual-env and run pytest
 - `pretty-format-json`: Checks that all your JSON files are pretty.
 - `requirements-txt-fixer`

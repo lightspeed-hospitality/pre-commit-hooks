@@ -39,7 +39,7 @@
 
 - id: flake8
   name: flake8
-  description: flake8 - Python Code Formatter
+  description: flake8 - Python style guide enforcement
   language: python
   entry: flake8
   files: \.py$
@@ -52,6 +52,13 @@
   files: \.(java)$
   stages: [commit, push, manual]
   require_serial: true
+
+- id: isort
+  name: isort
+  description: isort - Sorting Python imports
+  language: python
+  entry: isort
+  files: \.(py)$
 
 - id: mypy
   name: mypy
@@ -77,6 +84,14 @@
   entry: pretty-format-json
   language: python
   types: [json]
+
+- id: pylint
+  name: pylint
+  description: pylint - It's not just a linter that annoys you!
+  language: python
+  entry: pylint
+  files: \.(py)$
+  require_serial: true
 
 - id: requirements-txt-fixer
   name: Fix requirements.txt
