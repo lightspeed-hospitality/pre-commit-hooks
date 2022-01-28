@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-FORMATTER_VERSION=1.9
+FORMATTER_VERSION=1.13.0
 
 mkdir -p .cache
 pushd .cache > /dev/null
