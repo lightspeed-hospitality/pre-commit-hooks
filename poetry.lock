@@ -150,7 +150,7 @@ test = ["pytest (>=6.0)", "pytest-cov", "pytest-subtests", "pytest-xdist", "pret
 
 [[package]]
 name = "detect-secrets"
-version = "0.13.1+ibm.46.dss"
+version = "0.13.1+ibm.47.dss"
 description = "Tool for detecting secrets in the codebase"
 category = "main"
 optional = false
@@ -170,8 +170,8 @@ word_list = ["pyahocorasick"]
 [package.source]
 type = "git"
 url = "https://github.com/ibm/detect-secrets.git"
-reference = "0.13.1+ibm.46.dss"
-resolved_reference = "01c2c6c47ce43f28ed077867be30d8e0cf59c74b"
+reference = "0.13.1+ibm.47.dss"
+resolved_reference = "cf61789af70f279272ad943e9f2e602c67b65aff"
 
 [[package]]
 name = "flake8"
@@ -535,7 +535,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "1f3f3f2583b9d9700eff684aff1a75bdc380d5c1a6cb66d1936190589c4d4917"
+content-hash = "920a454be7cecfaf877698c4d0a8ba19c8c131130128cba63292ce411d3abc97"
 
 [metadata.files]
 astroid = [
@@ -654,6 +654,8 @@ cryptography = [
     {file = "cryptography-3.4.8-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:34dae04a0dce5730d8eb7894eab617d8a70d0c97da76b905de9efb7128ad7085"},
     {file = "cryptography-3.4.8-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1eb7bb0df6f6f583dd8e054689def236255161ebbcf62b226454ab9ec663746b"},
     {file = "cryptography-3.4.8-cp36-abi3-manylinux_2_24_x86_64.whl", hash = "sha256:9965c46c674ba8cc572bc09a03f4c649292ee73e1b683adb1ce81e82e9a6a0fb"},
+    {file = "cryptography-3.4.8-cp36-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:3c4129fc3fdc0fa8e40861b5ac0c673315b3c902bbdc05fc176764815b43dd1d"},
+    {file = "cryptography-3.4.8-cp36-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:695104a9223a7239d155d7627ad912953b540929ef97ae0c34c7b8bf30857e89"},
     {file = "cryptography-3.4.8-cp36-abi3-win32.whl", hash = "sha256:21ca464b3a4b8d8e86ba0ee5045e103a1fcfac3b39319727bc0fc58c09c6aff7"},
     {file = "cryptography-3.4.8-cp36-abi3-win_amd64.whl", hash = "sha256:3520667fda779eb788ea00080124875be18f2d8f0848ec00733c0ec3bb8219fc"},
     {file = "cryptography-3.4.8-pp36-pypy36_pp73-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:d2a6e5ef66503da51d2110edf6c403dc6b494cc0082f85db12f54e9c5d4c3ec5"},
