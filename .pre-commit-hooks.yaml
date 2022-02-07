@@ -139,3 +139,12 @@
   entry: yamllint
   language: python
   types: [file, yaml]
+
+- id: checkstyle
+  name: checkstyle
+  description: |
+    Runs checkstyle style check with mvn.
+    mvn executable is expected to be installed.
+  entry: pre_commit_hooks/maven-checkstyle.sh
+  language: script
+  pass_filenames: false

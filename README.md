@@ -57,6 +57,7 @@ Create a new git tag with the new version and [create a release based on the tag
 - `tidy-xml-format`
 - `trailing-whitespace`: Trims trailing whitespace.
 - `yamllint`
+- `checkstyle` - runs `mvn checkstyle:check`
 
 ### Options
 
