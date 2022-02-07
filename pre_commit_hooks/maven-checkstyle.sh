@@ -4,7 +4,7 @@
 cmd=""
 
 # Try to use mvnw but fall back to mvn if not found
-if [ ! -f "mvnw" ]; then
+if [ -f "mvnw" ]; then
   cmd+="./mvnw"
 else
   if ! command -v mvn &>/dev/null; then
