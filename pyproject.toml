@@ -1,18 +1,11 @@
 [tool.poetry]
-name = "pre-commit-hooks"
-version = "0.7.5"
-description = ""
+name = "ls-pre-commit-hooks"
+version = "0.7.8"
+description = "A collection of useful pre-commit hooks used in Lightspeed Hospitality"
 authors = ["Your Name <you@example.com>"]
 include = [
-  "pre_commit_hooks/*",
-  "submodule_pre_commit_hooks/pre_commit_hooks/*"
+  "ls_pre_commit_hooks/*"
 ]
-
-[tool.poetry.scripts]
-end-of-file-fixer="submodule_pre_commit_hooks.pre_commit_hooks.end_of_file_fixer:main"
-trailing-whitespace-fixer="submodule_pre_commit_hooks.pre_commit_hooks.trailing_whitespace_fixer:main"
-pretty-format-json="submodule_pre_commit_hooks.pre_commit_hooks.pretty_format_json:main"
-requirements-txt-fixer="submodule_pre_commit_hooks.pre_commit_hooks.requirements_txt_fixer:main"
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -24,6 +17,7 @@ flake8 = "^3.9.2"
 mypy = "^0.910"
 isort = "^5.9.3"
 pylint = "^2.11.1"
+pre-commit-hooks = "^4.1.0"
 
 [tool.poetry.dev-dependencies]
 

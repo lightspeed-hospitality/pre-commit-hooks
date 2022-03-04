@@ -41,23 +41,24 @@ Create a new git tag with the new version and [create a release based on the tag
 
 ## Available hooks
 
+### From [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks/tree/v4.1.0#hooks-available)
+
+All hooks are defined in [.pre-commit-hooks-yaml](.pre-commit-hooks-yaml). For further information and usage [check this list of available hooks here](https://github.com/pre-commit/pre-commit-hooks/tree/v4.1.0#hooks-available).
+
+### Hooks added in this repo
+
 - `black`: Python Code Formatter
 - `circleci-config-validate`: Test if the CircleCI config file is well formed.
 - `circleci-config-pack`: Pack the CircleCI config and build the config.yml
 - `detect-secrets`: Scan for secrets committed into the repo
-- `end-of-file-fixer`: Checks that all your JSON files are pretty.
 - `flake8`: Tool For Python Style Guide Enforcement
 - `google-java-code-format`
 - `isort`: Python import sorting
 - `poetry-pytest`: Use poetry to create a virtual-env and run pytest
-- `pretty-format-json`: Checks that all your JSON files are pretty.
-- `requirements-txt-fixer`
 - `shellcheck`
 - `shfmt`
-- `tidy-xml-format`
-- `trailing-whitespace`: Trims trailing whitespace.
 - `yamllint`
-- `checkstyle` - runs `mvn checkstyle:check`
+- `checkstyle`: runs `mvn checkstyle:check`
 
 ### Options
 
@@ -73,31 +74,8 @@ relatively out of sync from the mainstream, but it should work fine for our need
   - Install the correct version of detect-secrets:
 
       ```console
-      python3 -m pip install --upgrade "git+https://github.com/ibm/detect-secrets.git@0.13.1+ibm.45.dss#egg=detect-secrets"
+      python3 -m pip install --upgrade "git+https://github.com/ibm/detect-secrets.git@0.13.1+ibm.47.dss#egg=detect-secrets"
       ```
 
   - Run the baseline scan: `detect-secrets scan --base64-limit 4.5 --hex-limit 3  --update .secrets.baseline`
 - Set `args: ['--baseline', '.secrets.baseline']` in your pre-commit config
-
-#### `pretty-format-json`
-
-Checks that all your JSON files are pretty.  "Pretty"
-here means that keys are sorted and indented.  You can configure this with
-the following command-line options:
-
-- `--autofix` - automatically format json files
-- `--indent ...` - Control the indentation (either a number for a number of spaces or a string of whitespace).  Defaults to 2 spaces.
-- `--no-ensure-ascii` preserve unicode characters instead of converting to escape sequences
-- `--no-sort-keys` - when autofixing, retain the original key ordering (instead of sorting the keys)
-- `--top-keys comma,separated,keys` - Keys to keep at the top of mappings.
-
-#### `trailing-whitespace`
-
-Trims trailing whitespace:
-
-- To preserve Markdown [hard line-breaks](https://github.github.com/gfm/#hard-line-break)
-  use `args: [--markdown-linebreak-ext=md]` (or other extensions used
-  by your markdown-files).  If for some reason you want to treat all files
-  as markdown, use `--markdown-linebreak-ext=*`.
-- By default, this hook trims all whitespace from the ends of lines.
-    To specify a custom set of characters to trim instead, use `args: [--chars,"<chars to trim>"]`.
