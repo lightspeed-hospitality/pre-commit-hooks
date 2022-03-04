@@ -105,7 +105,7 @@
   language: script
   pass_filenames: false
 # pre-commit-hooks is installed as a dependency (in pyproject.toml), adding hooks from:
-# https://github.com/pre-commit/pre-commit-hooks/blob/master/.pre-commit-hooks.yaml
+# https://github.com/pre-commit/pre-commit-hooks/blob/v4.1.0/.pre-commit-hooks.yaml
 -   id: check-added-large-files
     name: check for added large files
     description: prevents giant files from being committed.
