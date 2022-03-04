@@ -8,14 +8,14 @@
 - id: circleci-config-pack
   name: CircleCI config pack
   description: Pack the config, creating the config.yml file
-  entry: pre_commit_hooks/circleci-config-pack.sh
+  entry: ls_pre_commit_hooks/circleci-config-pack.sh
   language: script
   files: ^.circleci/config/
   pass_filenames: false
 - id: circleci-config-validate
   name: CircleCI config validation
   description: Test if the CircleCI config is well formed.
-  entry: pre_commit_hooks/circleci-config-validate.sh
+  entry: ls_pre_commit_hooks/circleci-config-validate.sh
   language: script
   files: ^.circleci/config.yml$
 - id: detect-secrets
@@ -33,7 +33,7 @@
   files: \.py$
 - id: google-java-code-format
   name: Format Java with Google formatter
-  entry: pre_commit_hooks/google-java-code-format.sh
+  entry: ls_pre_commit_hooks/google-java-code-format.sh
   language: script
   types: [text]
   files: \.(java)$
@@ -57,7 +57,7 @@
 - id: poetry-pytest
   name: Pytest within poetry shell
   description: Use poetry to run pytest
-  entry: pre_commit_hooks/poetry-pytest.sh
+  entry: ls_pre_commit_hooks/poetry-pytest.sh
   language: script
   pass_filenames: false
   always_run: true
@@ -85,7 +85,7 @@
   args: ["-l", "-i", "2", "-ci"]
 - id: tidy-xml-format
   name: Format XML with Tidy
-  entry: pre_commit_hooks/tidy-xml-format.sh
+  entry: ls_pre_commit_hooks/tidy-xml-format.sh
   language: script
   types: [text]
   files: \.(xml)$
@@ -101,7 +101,7 @@
   description: |
     Runs checkstyle style check with mvn.
     mvn executable is expected to be installed.
-  entry: pre_commit_hooks/maven-checkstyle.sh
+  entry: ls_pre_commit_hooks/maven-checkstyle.sh
   language: script
   pass_filenames: false
 # pre-commit-hooks is installed as a dependency (in pyproject.toml), adding hooks from:
