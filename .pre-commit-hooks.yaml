@@ -306,3 +306,9 @@
     language: python
     types: [text]
     stages: [commit, push, manual]
+-   id: plantuml-renderer
+    name: plantuml renderer
+    description: render plantuml file (*.puml) to svg image
+    language: python
+    entry: ls_pre_commit_hooks/plantuml-renderer.sh
+    files: '*.puml'
