@@ -10,6 +10,6 @@ if ! command -v plantuml &>/dev/null; then
 fi
 
 for puml_file in "${@}"; do
-  echo "${@}"
-  plantuml -tsvg "${@}" -o "images" -v
+  plantuml -tsvg "${@}" -o "images"
+  git add \*.svg
 done
