@@ -309,6 +309,6 @@
 -   id: plantuml-renderer
     name: plantuml renderer
     description: render plantuml file (*.puml) to svg image
-    language: python
+    language: script
     entry: ls_pre_commit_hooks/plantuml-renderer.sh
     files: '.*\.puml$'
