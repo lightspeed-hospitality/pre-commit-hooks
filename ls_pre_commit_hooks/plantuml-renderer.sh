@@ -11,5 +11,5 @@ fi
 
 for puml_file in "${@}"; do
   plantuml -tsvg "${@}" -o "images"
-  git add \*.svg
 done
+git add \*.svg
