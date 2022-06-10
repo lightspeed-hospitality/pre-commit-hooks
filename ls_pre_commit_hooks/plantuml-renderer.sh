@@ -17,8 +17,7 @@ for puml_file in "${@}"; do
   plantuml -tsvg "$puml_file" -o "images"
   FILEDIR="${puml_file%/*}/images"
   FILENAME="${puml_file##*/}"
-  SVG_FILENAME="${FILENAME%.*}.svg"
-
-  echo "$FILEDIR/$SVG_FILENAME"
-  git add "$FILEDIR/$SVG_FILENAME"
+  SVG_FILE="$FILEDIR/${FILENAME%.*}.svg"
+  echo "" >> $SVG_FILE # add new line for tidy-xml conflict
+  git add "$SVG_FILE"
 done
