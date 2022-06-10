@@ -15,9 +15,10 @@ fi
 
 for puml_file in "${@}"; do
   plantuml -tsvg "$puml_file" -o "images"
-  echo "$puml_file"
-  echo "${puml_file%.*}.svg"
-#  git add "${puml_file%.*}.svg"
-done
+  FILEDIR="${puml_file%/*}/images"
+  FILENAME="${puml_file##*/}"
+  SVG_FILENAME="${FILENAME%.*}.svg"
 
-git status
+  echo "$FILEDIR/$SVG_FILENAME"
+  git add "$FILEDIR/$SVG_FILENAME"
+done
