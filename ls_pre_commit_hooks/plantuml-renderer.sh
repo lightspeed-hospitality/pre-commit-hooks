@@ -13,11 +13,18 @@ if ! command -v plantuml &>/dev/null; then
   fi
 fi
 
+changed_files=0
 for puml_file in "${@}"; do
   plantuml -tsvg "$puml_file" -o "images"
   FILEDIR="${puml_file%/*}/images"
   FILENAME="${puml_file##*/}"
   SVG_FILE="$FILEDIR/${FILENAME%.*}.svg"
   echo "" >> $SVG_FILE # add new line for tidy-xml conflict
-  git add "$SVG_FILE"
+  # Check if the svg file is dirty in the git unstaged changes
+  if ! git diff --quiet -- "$SVG_FILE" ; then
+    changed_files=$((changed_files+1))
+  fi
 done
+
+# Exit with non-zero code if any of the svg files was changed
+exit $changed_files
