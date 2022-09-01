@@ -10,7 +10,7 @@ include = [
 [tool.poetry.dependencies]
 python = ">=3.7.2,<4.0"
 yamllint = "^v1.25.0"
-detect-secrets = { git = "https://github.com/ibm/detect-secrets.git", tag = "0.13.1+ibm.50.dss" }
+detect-secrets = { git = "https://github.com/ibm/detect-secrets.git", tag = "0.13.1+ibm.51.dss" }
 pytest = "^7.1.2"
 black = "^22.3.0"
 flake8 = "^4.0.1"
