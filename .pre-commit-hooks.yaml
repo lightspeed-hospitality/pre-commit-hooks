@@ -312,3 +312,10 @@
     language: script
     entry: ls_pre_commit_hooks/plantuml-renderer.sh
     files: '.*\.puml$'
+- id: openapi-linter
+  name: Lint OpenAPI documents
+  description: Lint OpenAPI documents with spectral
+  entry: 809245501444.dkr.ecr.eu-central-1.amazonaws.com/openapi-linter
+  language: docker_image
+  pass_filenames: false
+  files: '^apidoc/**/{openapi,asyncapi}.yaml$'
