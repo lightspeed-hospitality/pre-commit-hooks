@@ -57,7 +57,7 @@
   entry: mypy
   language: python
   'types': [python]
-  args: ['--ignore-missing-imports', '--scripts-are-modules']
+  args: ["--ignore-missing-imports", "--scripts-are-modules"]
   require_serial: true
   additional_dependencies: []
 - id: poetry-pytest
@@ -88,7 +88,7 @@
   entry: submodule_syntaqx_git_hooks/hooks/shfmt.sh
   types: [shell]
   exclude_types: [csh, perl, python, ruby, tcsh, zsh]
-  args: ['-l', '-i', '2', '-ci']
+  args: ["-l", "-i", "2", "-ci"]
 - id: tidy-xml-format
   name: Format XML with Tidy
   entry: ls_pre_commit_hooks/tidy-xml-format.sh
