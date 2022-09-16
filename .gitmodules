@@ -1,7 +1,3 @@
 [submodule "submodule_syntaqx_git_hooks"]
 	path = submodule_syntaqx_git_hooks
 	url = git@github.com:syntaqx/git-hooks.git
-[submodule "openapi-linter"]
-	path = ls_pre_commit_hooks/openapi-linter
-	url = git@github.com:lightspeed-hospitality/openapi-linter.git
-	branch = main
