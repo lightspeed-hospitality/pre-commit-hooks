@@ -312,9 +312,17 @@
     language: script
     entry: ls_pre_commit_hooks/plantuml-renderer.sh
     files: '.*\.puml$'
-- id: openapi-linter
-  name: Lint OpenAPI documents
-  description: Lint OpenAPI documents with spectral
-  entry: 809245501444.dkr.ecr.us-east-1.amazonaws.com/release/internal/image/openapi-linter:16-6b69598
+- id: asyncapi-linter
+  name: lint asyncapi documents
+  description: lints asyncapi documents with spectral
+  entry: >
+    809245501444.dkr.ecr.us-east-1.amazonaws.com/release/internal/image/openapi-linter:latest-main # @todo: fix tag
+    asyncapi
   language: docker_image
-  pass_filenames: false
+- id: openapi-linter
+  name: lint openapi documents
+  description: lints openapi documents with spectral
+  entry: >
+    809245501444.dkr.ecr.us-east-1.amazonaws.com/release/internal/image/openapi-linter:latest-main # @todo: fix tag
+    openapi
+  language: docker_image
