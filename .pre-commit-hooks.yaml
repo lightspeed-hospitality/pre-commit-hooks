@@ -327,4 +327,4 @@
     809245501444.dkr.ecr.us-east-1.amazonaws.com/release/internal/image/openapi-linter:21-73a3f80
     openapi
   language: docker_image
-  files: ^apidoc/\.+/openapi\.yaml$
+  files: ^apidoc/.+/openapi\\.yaml$
