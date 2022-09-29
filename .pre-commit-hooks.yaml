@@ -336,5 +336,4 @@
   entry: prettier --write --list-different --ignore-unknown
   language: node
   files: \.xml$
-  stages: [commit, push, manual]
   args: ["--xml-whitespace-sensitivity", "ignore"]
