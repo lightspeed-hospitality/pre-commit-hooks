@@ -59,6 +59,7 @@ All hooks are defined in [.pre-commit-hooks-yaml](.pre-commit-hooks-yaml). For f
 - `shfmt`
 - `yamllint`
 - `checkstyle`: runs `mvn checkstyle:check`
+- `prettier-xml`: Formats XML using prettier, requires `node` to be initialized. Requires dummy `package.json` in the root of the `pre-commit-hooks` repo for successful initialization
 
 ### Options
 
