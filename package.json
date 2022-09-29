@@ -1,0 +1,5 @@
+{
+    "name": "placeholder_package",
+    "description": "Required for node-based hooks to be initialized",
+    "version": "0.0.0"
+}

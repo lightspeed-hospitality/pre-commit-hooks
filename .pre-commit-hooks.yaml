@@ -328,3 +328,12 @@
     openapi
   language: docker_image
   files: '^apidoc/.+/openapi\.yaml$'
+- id: prettier-xml
+  name: prettier-xml
+  additional_dependencies:
+    - 'prettier@2.7.1'
+    - '@prettier/plugin-xml@2.2.0'
+  entry: prettier --write --list-different --ignore-unknown
+  language: node
+  files: \.xml$
+  args: ["--xml-whitespace-sensitivity", "ignore"]
