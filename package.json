@@ -1,5 +1,5 @@
 {
     "name": "placeholder_package",
-    "description": "Note: double curly-braces because python .format",
+    "description": "Required for node-based hooks to be initialized",
     "version": "0.0.0"
 }
