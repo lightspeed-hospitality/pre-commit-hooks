@@ -315,18 +315,18 @@
 - id: asyncapi-linter
   name: lint asyncapi documents
   description: lints asyncapi documents with spectral
-  entry: >
-    809245501444.dkr.ecr.us-east-1.amazonaws.com/release/internal/image/openapi-linter:21-73a3f80
-    asyncapi
-  language: docker_image
+  entry: ls_pre_commit_hooks/openapi-linter.sh
+  args:
+    - asyncapi
+  language: script
   files: '^apidoc/.+/asyncapi\.yaml$'
 - id: openapi-linter
   name: lint openapi documents
   description: lints openapi documents with spectral
-  entry: >
-    809245501444.dkr.ecr.us-east-1.amazonaws.com/release/internal/image/openapi-linter:21-73a3f80
-    openapi
-  language: docker_image
+  entry: ls_pre_commit_hooks/openapi-linter.sh
+  args:
+    - openapi
+  language: script
   files: '^apidoc/.+/openapi\.yaml$'
 - id: prettier-xml
   name: prettier-xml
