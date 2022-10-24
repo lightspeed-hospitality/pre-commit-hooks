@@ -13,6 +13,8 @@ container_exists() {
 }
 
 run_circle_ci() {
+  # This workaround is required to overcome CircleCI's limitation due to use of remote docker.
+  # See here https://circleci.com/docs/building-docker-images/#mounting-folders for details.
   linter="$1"
   docker_image="$2"
   container="${linter}-linter-volume"
