@@ -317,8 +317,7 @@
   description: lints asyncapi documents with spectral
   entry: ls_pre_commit_hooks/openapi-linter.sh
   args:
-    - "asyncapi"
-  verbose: true
+    - asyncapi
   language: script
   files: '^apidoc/.+/asyncapi\.yaml$'
 - id: openapi-linter
@@ -326,8 +325,7 @@
   description: lints openapi documents with spectral
   entry: ls_pre_commit_hooks/openapi-linter.sh
   args:
-    - "openapi"
-  verbose: true
+    - openapi
   language: script
   files: '^apidoc/.+/openapi\.yaml$'
 - id: prettier-xml
