@@ -318,6 +318,7 @@
   entry: ls_pre_commit_hooks/openapi-linter.sh
   args:
     - "asyncapi"
+  verbose: true
   language: script
   files: '^apidoc/.+/asyncapi\.yaml$'
 - id: openapi-linter
@@ -326,6 +327,7 @@
   entry: ls_pre_commit_hooks/openapi-linter.sh
   args:
     - "openapi"
+  verbose: true
   language: script
   files: '^apidoc/.+/openapi\.yaml$'
 - id: prettier-xml

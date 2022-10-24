@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+set -ex
 
 OPENAPI_LINTER_VERSION="${OPENAPI_LINTER_VERSION:-21-73a3f80}"
 OPENAPI_LINTER_IMAGE="809245501444.dkr.ecr.us-east-1.amazonaws.com/release/internal/image/openapi-linter"
@@ -27,7 +27,7 @@ run_circle_ci() {
   docker create -v /src --name $container busybox /bin/true
 
   # copy sources into this volume
-  docker cp ${PWD} $container:/src
+  docker cp ${PWD}/. $container:/src
 
   # run linter
   docker run --volumes-from $container --workdir /src $docker_image $linter "$@"
