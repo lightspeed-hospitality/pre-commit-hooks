@@ -337,3 +337,11 @@
   language: node
   files: \.xml$
   args: ["--xml-whitespace-sensitivity", "ignore"]
+- id: spotless-apply
+  name: spotless-apply
+  description: |
+    Runs spotless-apply with mvn.
+    mvn executable is expected to be installed.
+  entry: ls_pre_commit_hooks/spotless-apply.sh
+  language: script
+  pass_filenames: false
