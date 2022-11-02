@@ -5,8 +5,13 @@ set -o pipefail
 set -o nounset
 
 _PATH=$1
+_ORG=$2
 if [ -z "${_PATH}" ]; then
   _PATH=.circleci/config.yml
+fi
+
+if [ -z "${_ORG}" ]; then
+  _ORG=github/lightspeed-hospitality
 fi
 
 DEBUG=${DEBUG:=0}
@@ -28,7 +33,7 @@ if ! command -v circleci &>/dev/null; then
   exit 1
 fi
 
-if ! eMSG=$(circleci --skip-update-check config validate -c "${_PATH}"); then
+if ! eMSG=$(circleci --skip-update-check config validate --org-slug "${_ORG}" -c "${_PATH}"); then
   echo "CircleCI Configuration Failed Validation."
   echo $eMSG
   exit 1
