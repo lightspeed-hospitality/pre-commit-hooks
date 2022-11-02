@@ -34,7 +34,10 @@ if ! command -v circleci &>/dev/null; then
 fi
 
 if ! eMSG=$(circleci --skip-update-check config validate --org-slug "${_ORG}" -c "${_PATH}"); then
+  if [[ ${eMSG} =~ "Cannot find" ]] || [[ ${eMSG} =~ "Permission denied" ]]; then
+    echo "This config probably uses private orbs, please run 'circleci setup' and provide your token."
+  fi
   echo "CircleCI Configuration Failed Validation."
-  echo $eMSG
+  echo ${eMSG}
   exit 1
 fi
