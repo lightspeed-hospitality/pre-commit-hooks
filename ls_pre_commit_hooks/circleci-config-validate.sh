@@ -4,13 +4,12 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-_ORG="github/lightspeed-hospitality"
-
+_ORG_SLUG_FLAG=""
 
 function usage {
     echo "usage: [paths] [-h] [-o organization]"
     echo "  -h      display help"
-    echo "  -o      circleci organization (default: ${_ORG})"
+    echo "  -o      circleci organization (optional)"
     exit 1
 }
 
@@ -22,7 +21,7 @@ do
         case $option
         in
             h) usage;;
-            o) _ORG_SLUG="--org-slug $OPTARG";;
+            o) _ORG_SLUG_FLAG="--org-slug $OPTARG";;
         esac
     else
         positional_args+=("${!OPTIND}")
@@ -52,7 +51,7 @@ fi
 
 for path in "${positional_args[@]}"
 do
-  if ! eMSG=$(circleci --skip-update-check config validate -c "${path}" "${_ORG_SLUG}"); then
+  if ! eMSG=$(circleci --skip-update-check config validate -c "${path}" "${_ORG_SLUG_FLAG}"); then
     if [[ ${eMSG} =~ "Cannot find" ]] || [[ ${eMSG} =~ "Permission denied" ]]; then
       echo "This config probably uses private orbs, please run 'circleci setup' and provide your token."
     fi
