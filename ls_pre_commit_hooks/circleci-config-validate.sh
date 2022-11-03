@@ -4,7 +4,7 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-_ORG_SLUG_FLAG=""
+_ORG_SLUG=""
 
 function usage {
     echo "usage: [paths] [-h] [-o organization]"
@@ -21,7 +21,7 @@ do
         case $option
         in
             h) usage;;
-            o) _ORG_SLUG_FLAG="--org-slug $OPTARG";;
+            o) _ORG_SLUG="${OPTARG}";;
         esac
     else
         positional_args+=("${!OPTIND}")
@@ -51,7 +51,7 @@ fi
 
 for path in "${positional_args[@]}"
 do
-  if ! eMSG=$(circleci --skip-update-check config validate -c "${path}" "${_ORG_SLUG_FLAG}"); then
+  if ! eMSG=$(circleci --skip-update-check config validate -c "${path}" --org-slug ${_ORG_SLUG}); then
     if [[ ${eMSG} =~ "Cannot find" ]] || [[ ${eMSG} =~ "Permission denied" ]]; then
       echo "This config probably uses private orbs, please run 'circleci setup' and provide your token."
     fi
