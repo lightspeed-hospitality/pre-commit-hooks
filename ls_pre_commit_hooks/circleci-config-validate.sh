@@ -8,7 +8,7 @@ _ORG="github/lightspeed-hospitality"
 
 
 function usage {
-    echo "usage: [-h] [-o organization]"
+    echo "usage: [paths] [-h] [-o organization]"
     echo "  -h      display help"
     echo "  -o      circleci organization (default: ${_ORG})"
     exit 1
@@ -52,7 +52,7 @@ fi
 
 for path in "${positional_args[@]}"
 do
-  if ! eMSG=$(circleci --skip-update-check config validate --org-slug "${_ORG}" -c "${path}}"); then
+  if ! eMSG=$(circleci --skip-update-check config validate --org-slug "${_ORG}" -c "${path}"); then
     if [[ ${eMSG} =~ "Cannot find" ]] || [[ ${eMSG} =~ "Permission denied" ]]; then
       echo "This config probably uses private orbs, please run 'circleci setup' and provide your token."
     fi
