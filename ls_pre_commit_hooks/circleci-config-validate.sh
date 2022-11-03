@@ -57,7 +57,7 @@ do
     cmdArgs+=('-o' "${_ORG_SLUG}")
   fi
 
-  if ! eMSG=$(circleci "${cmdArgs[@]}"); then
+  if ! eMSG=$(circleci "${cmdArgs[@]}" 2>&1); then
     if [[ ${eMSG} =~ "Cannot find" ]] || [[ ${eMSG} =~ "Permission denied" ]]; then
       echo "This config probably uses private orbs, please run 'circleci setup' and provide your token."
     fi
