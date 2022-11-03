@@ -4,15 +4,32 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-_PATH=$1
-_ORG=$2
-if [ -z "${_PATH}" ]; then
-  _PATH=.circleci/config.yml
-fi
+_ORG="github/lightspeed-hospitality"
 
-if [ -z "${_ORG}" ]; then
-  _ORG=github/lightspeed-hospitality
-fi
+
+function usage {
+    echo "usage: [-h] [-o organization]"
+    echo "  -h      display help"
+    echo "  -o      circleci organization (default: ${_ORG})"
+    exit 1
+}
+
+positional_args=()
+while [ $OPTIND -le "$#" ]
+do
+    if getopts o:h option
+    then
+        case $option
+        in
+            h) usage;;
+            o) _ORG="$OPTARG";;
+        esac
+    else
+        positional_args+=("${!OPTIND}")
+        ((OPTIND++))
+    fi
+done
+
 
 DEBUG=${DEBUG:=0}
 [[ $DEBUG -eq 1 ]] && set -o xtrace
@@ -33,11 +50,14 @@ if ! command -v circleci &>/dev/null; then
   exit 1
 fi
 
-if ! eMSG=$(circleci --skip-update-check config validate --org-slug "${_ORG}" -c "${_PATH}"); then
-  if [[ ${eMSG} =~ "Cannot find" ]] || [[ ${eMSG} =~ "Permission denied" ]]; then
-    echo "This config probably uses private orbs, please run 'circleci setup' and provide your token."
+for path in "${positional_args[@]}"
+do
+  if ! eMSG=$(circleci --skip-update-check config validate --org-slug "${_ORG}" -c "${path}}"); then
+    if [[ ${eMSG} =~ "Cannot find" ]] || [[ ${eMSG} =~ "Permission denied" ]]; then
+      echo "This config probably uses private orbs, please run 'circleci setup' and provide your token."
+    fi
+    echo "CircleCI Configuration Failed Validation."
+    echo "${eMSG}"
+    exit 1
   fi
-  echo "CircleCI Configuration Failed Validation."
-  echo "${eMSG}"
-  exit 1
-fi
+done
