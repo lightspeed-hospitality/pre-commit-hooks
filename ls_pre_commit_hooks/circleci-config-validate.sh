@@ -9,7 +9,7 @@ _ORG_SLUG=""
 function usage {
     echo "usage: [paths] [-h] [-o organization]"
     echo "  -h      display help"
-    echo "  -o      circleci organization (optional)"
+    echo "  -o      organization slug (for example: github/example-org), used when a config depends on private orbs"
     exit 1
 }
 
@@ -51,7 +51,13 @@ fi
 
 for path in "${positional_args[@]}"
 do
-  if ! eMSG=$(circleci --skip-update-check config validate -c "${path}" --org-slug "${_ORG_SLUG}"); then
+
+  cmdArgs=('--skip-update-check' 'config' 'validate' '-c' "${path}")
+  if [ -n "${_ORG_SLUG}" ]; then
+    cmdArgs+=('-o' "${_ORG_SLUG}")
+  fi
+
+  if ! eMSG=$(circleci "${cmdArgs[@]}"); then
     if [[ ${eMSG} =~ "Cannot find" ]] || [[ ${eMSG} =~ "Permission denied" ]]; then
       echo "This config probably uses private orbs, please run 'circleci setup' and provide your token."
     fi
@@ -59,4 +65,5 @@ do
     echo "${eMSG}"
     exit 1
   fi
+
 done
