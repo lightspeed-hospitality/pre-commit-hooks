@@ -22,7 +22,7 @@ do
         case $option
         in
             h) usage;;
-            o) _ORG="$OPTARG";;
+            o) _ORG_SLUG="--org-slug $OPTARG";;
         esac
     else
         positional_args+=("${!OPTIND}")
@@ -52,7 +52,7 @@ fi
 
 for path in "${positional_args[@]}"
 do
-  if ! eMSG=$(circleci --skip-update-check config validate --org-slug "${_ORG}" -c "${path}"); then
+  if ! eMSG=$(circleci --skip-update-check config validate -c "${path}" "${_ORG_SLUG}"); then
     if [[ ${eMSG} =~ "Cannot find" ]] || [[ ${eMSG} =~ "Permission denied" ]]; then
       echo "This config probably uses private orbs, please run 'circleci setup' and provide your token."
     fi
