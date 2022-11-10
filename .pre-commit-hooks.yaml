@@ -328,6 +328,11 @@
     - openapi
   language: script
   files: '^apidoc/.+/openapi\.yaml$'
+- id: openapi-yaml-not-yml
+  name: Make sure openapi definitions end with .yaml
+  entry: It's YAML not YML
+  language: fail
+  files: '^apidoc/.*\.yml$'
 - id: prettier-xml
   name: prettier-xml
   additional_dependencies:
