@@ -37,6 +37,12 @@
   language: python
   entry: flake8
   files: \.py$
+- id: ruff
+  name: ruff
+  description: ruff - Python linting
+  language: python
+  entry: ruff
+  files: \.py$
 - id: google-java-code-format
   name: Format Java with Google formatter
   entry: ls_pre_commit_hooks/google-java-code-format.sh

@@ -48,6 +48,7 @@ All hooks are defined in [.pre-commit-hooks-yaml](.pre-commit-hooks-yaml). For f
 ### Hooks added in this repo
 
 - `black`: Python Code Formatter
+- `ruff`: An extremely fast Python linter
 - `circleci-config-validate`: Test if the CircleCI config file is well formed.
 - `circleci-config-pack`: Pack the CircleCI config and build the config.yml
 - `detect-secrets`: Scan for secrets committed into the repo
