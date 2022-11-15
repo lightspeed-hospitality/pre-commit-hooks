@@ -41,7 +41,7 @@
   name: ruff
   description: ruff - Python linting
   language: python
-  entry: ruff
+  entry: ruff --fix
   files: \.py$
 - id: google-java-code-format
   name: Format Java with Google formatter
