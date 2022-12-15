@@ -1,11 +1,11 @@
 ---
 version: 2.1
 orbs:
-  lsk-python: lsk/python@1.2
+  lsk-python: lsk/python@1.4
 
 workflows:
   main:
     jobs:
       - lsk-python/pre-commit:
           context: global
-          python-version: 3.9.4
+          executor-name: "python-3-9"
