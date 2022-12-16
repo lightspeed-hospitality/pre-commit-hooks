@@ -56,6 +56,7 @@ All hooks are defined in [.pre-commit-hooks-yaml](.pre-commit-hooks-yaml). For f
 - `google-java-code-format`
 - `isort`: Python import sorting
 - `poetry-pytest`: Use poetry to create a virtual-env and run pytest
+- `poetry-run`: Use poetry to run any check command (pyright, pylint, ...)
 - `shellcheck`
 - `shfmt`
 - `yamllint`

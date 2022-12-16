@@ -73,6 +73,13 @@
   language: script
   pass_filenames: false
   always_run: true
+- id: poetry-run
+  name: General poetry run command
+  description: Use poetry to run any check command
+  entry: ls_pre_commit_hooks/poetry-run.sh
+  language: script
+  pass_filenames: false
+  always_run: true
 - id: pylint
   name: pylint
   description: pylint - It's not just a linter that annoys you!
