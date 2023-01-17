@@ -18,7 +18,7 @@ mypy = "^0.961"
 isort = "^5.9.3"
 pylint = "^2.14.3"
 pre-commit-hooks = "^4.3.0"
-ruff = "^0.0.117"
+ruff = "^0.0.224"
 
 [tool.poetry.dev-dependencies]
 
