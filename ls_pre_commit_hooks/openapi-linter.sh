@@ -17,7 +17,8 @@ run_circle_ci() {
   # See here https://circleci.com/docs/building-docker-images/#mounting-folders for details.
   linter="$1"
   docker_image="$2"
-  container="${linter}-linter-volume"
+  random_suffix=$(uuidgen | tr -d '-')
+  container="${linter}-linter-volume-${random_suffix}"
 
   shift 2
 

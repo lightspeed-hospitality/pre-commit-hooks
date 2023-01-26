@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ls-pre-commit-hooks"
-version = "0.7.22"
+version = "0.7.26"
 description = "A collection of useful pre-commit hooks used in Lightspeed Hospitality"
 authors = ["Your Name <you@example.com>"]
 include = [
