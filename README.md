@@ -77,7 +77,7 @@ relatively out of sync from the mainstream, but it should work fine for our need
   - Install the correct version of detect-secrets:
 
       ```console
-      python3 -m pip install --upgrade "git+https://github.com/ibm/detect-secrets.git@0.13.1+ibm.51.dss#egg=detect-secrets"
+      python3 -m pip install --upgrade "git+https://github.com/ibm/detect-secrets.git@0.13.1+ibm.56.dss#egg=detect-secrets"
       ```
 
   - Run the baseline scan: `detect-secrets scan --base64-limit 4.5 --hex-limit 3  --update .secrets.baseline`
