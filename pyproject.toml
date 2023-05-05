@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ls-pre-commit-hooks"
-version = "0.7.29"
+version = "0.7.30"
 description = "A collection of useful pre-commit hooks used in Lightspeed Hospitality"
 authors = ["Your Name <you@example.com>"]
 include = [
@@ -10,7 +10,7 @@ include = [
 [tool.poetry.dependencies]
 python = ">=3.7.2,<4.0"
 yamllint = "^v1.25.0"
-detect-secrets = { git = "https://github.com/ibm/detect-secrets.git", tag = "0.13.1+ibm.59.dss" }
+detect-secrets = { git = "https://github.com/ibm/detect-secrets.git", tag = "0.13.1+ibm.60.dss" }
 pytest = "^7.1.2"
 black = "^22.3.0"
 flake8 = "^4.0.1"
