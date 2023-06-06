@@ -363,3 +363,11 @@
   entry: ls_pre_commit_hooks/spotless-apply.sh
   language: script
   pass_filenames: false
+# Based on https://github.com/hadolint/hadolint/blob/024fd640378acd5d8218f77ec2c744826cdda5ce/.pre-commit-hooks.yaml
+# But with a pinned version for the docker image
+- id: hadolint-docker
+  name: Lint Dockerfiles
+  description: Runs hadolint Docker image to lint Dockerfiles
+  language: docker_image
+  types: ["dockerfile"]
+  entry: ghcr.io/hadolint/hadolint:v2.12.0 hadolint
