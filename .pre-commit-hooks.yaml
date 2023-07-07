@@ -371,3 +371,11 @@
   language: docker_image
   types: ["dockerfile"]
   entry: ghcr.io/hadolint/hadolint:v2.12.0 hadolint
+# Based on https://github.com/hadolint/hadolint/blob/024fd640378acd5d8218f77ec2c744826cdda5ce/.pre-commit-hooks.yaml
+# But with a script that downloads it and runs the binary
+- id: hadolint-check
+  name: Lint Dockerfiles
+  description: Downloads and runs hadolint binary to lint Dockerfiles
+  language: script
+  types: ["dockerfile"]
+  entry: ls_pre_commit_hooks/hadolint-check.sh
