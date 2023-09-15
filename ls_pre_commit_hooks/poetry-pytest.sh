@@ -19,4 +19,4 @@ fi
 
 echo "Running pytest in $PWD"
 poetry install --no-ansi --no-interaction -v
-poetry run pytest -vv
+poetry run --no-ansi --no-interaction -- pytest -vv
