@@ -1,4 +1,9 @@
-#!/bin/bash -e
+#!/bin/bash
+
+set -e
+set -o pipefail
+set -u
+set -x
 
 if ! [ -x "$(command -v poetry)" ]; then
   echo 'poetry command not found'
@@ -6,4 +11,4 @@ if ! [ -x "$(command -v poetry)" ]; then
   exit 1
 fi
 
-poetry run "$@"
+poetry run --no-ansi --no-interaction -- "$@"

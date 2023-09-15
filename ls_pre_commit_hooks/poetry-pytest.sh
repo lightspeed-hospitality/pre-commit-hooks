@@ -1,7 +1,12 @@
-#!/bin/bash -e
+#!/bin/bash
+
+set -e
+set -o pipefail
+set -u
+set -x
 
 # do not run in Circle CI
-if [[ -n $CIRCLECI ]]; then
+if [[ -n "${CIRCLECI:-}" ]]; then
   echo "Only to be executed locally, as a pre-commit hook."
   exit 0;
 fi
@@ -12,6 +17,6 @@ if ! [ -x "$(command -v poetry)" ]; then
   exit 1
 fi
 
-_PATH="$PWD/$1"
-echo "Running pytest in $_PATH"
-cd $PWD && poetry install -v && poetry run pytest "${_PATH}" -vv
+echo "Running pytest in $PWD"
+poetry install --no-ansi --no-interaction -v
+poetry run --no-ansi --no-interaction -- pytest -vv
