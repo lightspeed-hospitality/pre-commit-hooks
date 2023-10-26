@@ -43,6 +43,12 @@
   language: python
   entry: ruff --fix
   files: \.py$
+- id: ruff-format
+  name: ruff-format
+  description: ruff-format - Python formatting
+  language: python
+  entry: ruff format
+  files: \.py$
 - id: google-java-code-format
   name: Format Java with Google formatter
   entry: ls_pre_commit_hooks/google-java-code-format.sh

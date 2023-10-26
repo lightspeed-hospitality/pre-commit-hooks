@@ -3,9 +3,7 @@ name = "ls-pre-commit-hooks"
 version = "0.7.32"
 description = "A collection of useful pre-commit hooks used in Lightspeed Hospitality"
 authors = ["Your Name <you@example.com>"]
-include = [
-  "ls_pre_commit_hooks/*"
-]
+include = ["ls_pre_commit_hooks/*"]
 
 [tool.poetry.dependencies]
 python = ">=3.7.2,<4.0"
@@ -18,7 +16,7 @@ mypy = "^0.961"
 isort = "^5.9.3"
 pylint = "^2.14.3"
 pre-commit-hooks = "^4.3.0"
-ruff = "^0.0.269"
+ruff = "^0.1.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
