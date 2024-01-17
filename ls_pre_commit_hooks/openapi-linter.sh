@@ -18,31 +18,33 @@ run_circle_ci() {
   linter="$1"
   docker_image="$2"
   random_suffix=$(uuidgen | tr -d '-')
-  container="${linter}-linter-volume-${random_suffix}"
+  container_name="${linter}-linter-volume-${random_suffix}"
 
   shift 2
 
-  if container_exists "${container}"; then
-    docker container rm -f "${container}"
+  if container_exists "${container_name}"; then
+    docker container rm -f "${container_name}"
   fi
 
   # create a dummy container which will hold a volume
-  docker create -v /src --name "${container}" busybox /bin/true
+  docker create -v /src --name "${container_name}" busybox /bin/true
 
   # copy sources into this volume
-  docker cp "${PWD}/." "${container}:/src"
+  docker cp "${PWD}/." "${container_name}:/src"
 
   # run linter
-  docker run --volumes-from "${container}" --workdir /src "${docker_image}" "${linter}" "$@"
+  docker run --volumes-from "${container_name}" --workdir /src "${docker_image}" "${linter}" "$@"
 }
 
 run_local() {
   linter="$1"
   docker_image="$2"
+  random_suffix=$(uuidgen | tr -d '-')
+  container_name="${linter}-linter-${random_suffix}"
 
   shift 2
 
-  docker run -v "${PWD}:/src:rw,Z" --workdir /src "${docker_image}" "${linter}" "$@"
+  docker run --rm --name "${container_name}" -v "${PWD}:/src:rw,Z" --workdir /src "${docker_image}" "${linter}" "$@"
 }
 
 run() {
