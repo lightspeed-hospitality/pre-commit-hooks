@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-LINTER_TAG="${OPENAPI_LINTER_VERSION:-147-6333941}"
+LINTER_TAG="${OPENAPI_LINTER_VERSION:-169-f3bf5c4}"
 LINTER_IMAGE="809245501444.dkr.ecr.us-east-1.amazonaws.com/release/internal/image/openapi-linter"
 
 container_exists() {
