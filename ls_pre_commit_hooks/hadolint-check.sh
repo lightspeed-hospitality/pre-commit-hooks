@@ -1,17 +1,9 @@
 #!/usr/bin/env bash
 
-set -x
-set -e
-set -o pipefail
+set -eo pipefail
 
-HADOLINT_VERSION=v2.12.0
-
-mkdir -p ".cache/hadolint-${HADOLINT_VERSION}"
-pushd ".cache/hadolint-${HADOLINT_VERSION}" > /dev/null
-
-if echo "${OSTYPE}" | grep -q darwin ; then
+if [[ "${OSTYPE}" == *"darwin"* ]] ; then
   OS="Darwin"
-  ARCH="x86_64"  # There's no arm64 build as of 2023-07-07
 else
   OS="Linux"
   MACHINE_TYPE="$(uname -m)"
@@ -29,20 +21,39 @@ else
   esac
 fi
 
-URL="https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-${OS}-${ARCH}"
+if [[ $OS == "Darwin" ]]; then
+  if ! command -v hadolint &>/dev/null; then
+    if command -v brew &>/dev/null; then
+      brew install --quiet hadolint
+    else
+      >&2 echo 'hadolint and brew not found. Please install brew and rerun the hook'
+      exit 1
+    fi
+  fi
+  CMD="hadolint"
+else
+  HADOLINT_VERSION="v2.12.0"
+  FILE_NAME="hadolint-${OS}-${ARCH}"
+  URL="https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-${OS}-${ARCH}"
 
-FILE_NAME="hadolint-${OS}-${ARCH}"
-if [ ! -f "${FILE_NAME}" ] ; then
-  curl -sSL -o "${FILE_NAME}" "$URL"
-  chmod 755 "${FILE_NAME}"
+  mkdir -p ".cache/hadolint-${HADOLINT_VERSION}"
+  pushd ".cache/hadolint-${HADOLINT_VERSION}" > /dev/null
+
+  if [ ! -f "${FILE_NAME}" ] ; then
+    echo "Fetching hadolint from ${URL}"
+    curl -sSL -o "${FILE_NAME}" "$URL"
+    chmod 755 "${FILE_NAME}"
+  fi
+
+  if [ ! -f "${FILE_NAME}.sha256" ] ; then
+    curl -sSL -o "${FILE_NAME}.sha256" "$URL.sha256"
+  fi
+
+  sha256sum -c "${FILE_NAME}.sha256"
+
+  CMD=".cache/hadolint-${HADOLINT_VERSION}/${FILE_NAME}"
+  popd > /dev/null
 fi
-if [ ! -f "${FILE_NAME}.sha256" ] ; then
-  curl -sSL -o "${FILE_NAME}.sha256" "$URL.sha256"
-fi
 
-sha256sum -c "${FILE_NAME}.sha256"
-
-popd > /dev/null
-echo "Using hadolint version ${HADOLINT_VERSION}"
-
-exec ".cache/hadolint-${HADOLINT_VERSION}/${FILE_NAME}" "$@"
+$CMD --version
+exec "$CMD" "$@"
