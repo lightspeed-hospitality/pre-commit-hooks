@@ -7,6 +7,6 @@ elif [ -f "./mvnw" ]; then
   echo "Running spotless using maven WRAPPER from path"
   ./mvnw spotless:apply
 else
-  >&2 echo "Error: neither 'mvn' nor './mvnw' found (Maven is needed to execute spotless:apply)" >&2
+  >&2 echo "Error: Neither 'mvn' nor './mvnw' found (Maven is needed to execute spotless:apply)"
   exit 1
 fi
