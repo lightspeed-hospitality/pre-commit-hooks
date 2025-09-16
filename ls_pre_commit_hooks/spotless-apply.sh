@@ -1,19 +1,12 @@
 #!/usr/bin/env bash
-
-# We collect the command to execute into this variable
-cmd=""
-
-# Try to use mvnw but fall back to mvn if not found
-if [ -f "mvnw" ]; then
-  cmd+="./mvnw"
+# Use mvn from path, fall back to mvnw (wrapper)
+if command -v mvn &>/dev/null; then
+  echo "Running spotless with mvn from path"
+  mvn spotless:apply
+elif [ -f "./mvnw" ]; then
+  echo "Running spotless using maven WRAPPER from path"
+  ./mvnw spotless:apply
 else
-  if ! command -v mvn &>/dev/null; then
-    >&2 echo "Error: neither 'mvnw' script nor 'mvn' command are found"
-    exit 1
-  fi
-  cmd+="mvn"
+  >&2 echo "Error: neither 'mvn' nor './mvnw' found (Maven is needed to execute spotless:apply)" >&2
+  exit 1
 fi
-
-cmd+=" spotless:apply"
-
-eval "$cmd"

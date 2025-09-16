@@ -364,8 +364,8 @@
 - id: spotless-apply
   name: spotless-apply
   description: |
-    Runs spotless-apply with mvn.
-    mvn executable is expected to be installed.
+    Run spotless:apply with mvn/mvnw. 
+    (Either one installed is a hard requirement)
   entry: ls_pre_commit_hooks/spotless-apply.sh
   language: script
   pass_filenames: false
