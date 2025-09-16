@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Use mvn from path, fall back to mvnw (wrapper)
 if command -v mvn &>/dev/null; then
-  echo "Running spotless with mvn from path"
+  echo "Running spotless with mvn"
   mvn spotless:apply
 elif [ -f "./mvnw" ]; then
   echo "Running spotless using maven WRAPPER from path"
