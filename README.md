@@ -69,6 +69,10 @@ All hooks are defined in [.pre-commit-hooks-yaml](.pre-commit-hooks-yaml). For f
 
 Scan for secrets committed into the repo.
 
+**Note**: Since detect secrets (on Yelp) seems to [not be maintained anymore](https://github.com/Yelp/detect-secrets/issues/473),
+we decided to use the [IBM fork](https://github.com/IBM/detect-secrets) since at least it's actively developed. Only issue is that it's
+relatively out of sync from the mainstream, but it should work fine for our needs.
+
 - To generate a baseline of secrets:
   - Install the correct version of detect-secrets:
 
