@@ -17,6 +17,7 @@ isort = "^5.9.3"
 pylint = "^2.14.3"
 pre-commit-hooks = "^4.3.0"
 ruff = "^0.1.2"
+boxsdk = {extras = ["jwt"], version = "^10.0.0"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
