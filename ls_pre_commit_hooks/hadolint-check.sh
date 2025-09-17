@@ -32,7 +32,7 @@ if [[ $OS == "Darwin" ]]; then
   fi
   CMD="hadolint"
 else
-  HADOLINT_VERSION="v2.12.0"
+  HADOLINT_VERSION="v2.13.1"
   FILE_NAME="hadolint-${OS}-${ARCH}"
   URL="https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-${OS}-${ARCH}"
 
