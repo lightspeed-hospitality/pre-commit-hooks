@@ -29,6 +29,7 @@
   description: Detects high entropy strings that are likely to be passwords.
   language: python
   entry: detect-secrets-hook
+  additional_dependencies: [boxsdk<4]
   args: ["--base64-limit", "4.5", "--hex-limit", "3"]
   files: .*
 - id: flake8
