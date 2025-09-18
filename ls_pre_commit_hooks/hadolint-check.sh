@@ -34,22 +34,16 @@ if [[ $OS == "Darwin" ]]; then
 else
   HADOLINT_VERSION="v2.13.1"
   URL="https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-${OS}-${ARCH}"
-  # Getting a real file name (avoiding possible file name changes, if that happens, the sha256 check will fail)
-  FILE_NAME=$(curl -sIL $URL | grep -i content-disposition | grep filename= | sed 's/.*filename=\(.*\)/\1/')
-
+  
   mkdir -p ".cache/hadolint-${HADOLINT_VERSION}"
   pushd ".cache/hadolint-${HADOLINT_VERSION}" > /dev/null
 
-  if [ ! -f "${FILE_NAME}" ] ; then
-    echo "Fetching hadolint from ${URL}"
-    curl -sSL -O "$URL"
-    chmod 755 "${FILE_NAME}"
-  fi
+  echo "Fetching hadolint from ${URL}"
+  # Getting a real file name (avoiding possible file name changes, if that happens, the sha256 check will fail)
+  FILE_NAME=$(curl -sSLOJ -w '%{filename_effective}' "$URL")
+  chmod 755 "${FILE_NAME}"
 
-  if [ ! -f "${FILE_NAME}.sha256" ] ; then
-    curl -sSL -O "$URL.sha256"
-  fi
-
+  curl -sSL -O "$URL.sha256"
   sha256sum -c "${FILE_NAME}.sha256"
 
   CMD=".cache/hadolint-${HADOLINT_VERSION}/${FILE_NAME}"
