@@ -33,20 +33,24 @@ if [[ $OS == "Darwin" ]]; then
   CMD="hadolint"
 else
   HADOLINT_VERSION="v2.13.1"
+  HADOLINT_FILE_NAME="hadolint"
   URL="https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-${OS}-${ARCH}"
-  
+
   mkdir -p ".cache/hadolint-${HADOLINT_VERSION}"
   pushd ".cache/hadolint-${HADOLINT_VERSION}" > /dev/null
 
-  echo "Fetching hadolint from ${URL}"
-  # Getting a real file name (avoiding possible file name changes, if that happens, the sha256 check will fail)
-  FILE_NAME=$(curl -sSLOJ -w '%{filename_effective}' "$URL")
-  chmod 755 "${FILE_NAME}"
+  if [ ! -f "${HADOLINT_FILE_NAME}" ] ; then
+    echo "Fetching hadolint from ${URL}"
+    # Getting a real file name (avoiding possible file name changes, if that happens, the sha256 check will fail)
+    DOWNLOADED_FILE_NAME=$(curl -sSLJ -O -w '%{filename_effective}' "$URL")
+    chmod 755 "${DOWNLOADED_FILE_NAME}"
+  
+    curl -sSL -O "$URL.sha256"
+    sha256sum -c "${DOWNLOADED_FILE_NAME}.sha256"
+  fi
 
-  curl -sSL -O "$URL.sha256"
-  sha256sum -c "${FILE_NAME}.sha256"
-
-  CMD=".cache/hadolint-${HADOLINT_VERSION}/${FILE_NAME}"
+  mv "${DOWNLOADED_FILE_NAME}" "${HADOLINT_FILE_NAME}"
+  CMD=".cache/hadolint-${HADOLINT_VERSION}/${HADOLINT_FILE_NAME}"
   popd > /dev/null
 fi
 
