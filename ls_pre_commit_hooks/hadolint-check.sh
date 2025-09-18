@@ -47,9 +47,10 @@ else
 
     curl -sSL -O "$URL.sha256"
     sha256sum -c "${DOWNLOADED_FILE_NAME}.sha256"
+
+    mv "${DOWNLOADED_FILE_NAME}" "${HADOLINT_FILE_NAME}"
   fi
 
-  mv "${DOWNLOADED_FILE_NAME}" "${HADOLINT_FILE_NAME}"
   CMD=".cache/hadolint-${HADOLINT_VERSION}/${HADOLINT_FILE_NAME}"
   popd > /dev/null
 fi
