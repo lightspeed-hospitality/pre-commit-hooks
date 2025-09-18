@@ -3,9 +3,9 @@
 set -eo pipefail
 
 if [[ "${OSTYPE}" == *"darwin"* ]] ; then
-  OS="darwin"
+  OS="Darwin"
 else
-  OS="linux"
+  OS="Linux"
   MACHINE_TYPE="$(uname -m)"
   case "$MACHINE_TYPE" in
       amd64 | x86_64 | x64)
@@ -21,7 +21,7 @@ else
   esac
 fi
 
-if [[ $OS == "darwin" ]]; then
+if [[ $OS == "Darwin" ]]; then
   if ! command -v hadolint &>/dev/null; then
     if command -v brew &>/dev/null; then
       brew install --quiet hadolint
@@ -33,20 +33,21 @@ if [[ $OS == "darwin" ]]; then
   CMD="hadolint"
 else
   HADOLINT_VERSION="v2.13.1"
-  FILE_NAME="hadolint-${OS}-${ARCH}"
   URL="https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-${OS}-${ARCH}"
+  # Getting a real file name (avoiding possible file name changes, if that happens, the sha256 check will fail)
+  FILE_NAME=$(curl -sIL $URL | grep -i content-disposition | grep filename= | sed 's/.*filename=\(.*\)/\1/')
 
   mkdir -p ".cache/hadolint-${HADOLINT_VERSION}"
   pushd ".cache/hadolint-${HADOLINT_VERSION}" > /dev/null
 
   if [ ! -f "${FILE_NAME}" ] ; then
     echo "Fetching hadolint from ${URL}"
-    curl -sSL -o "${FILE_NAME}" "$URL"
+    curl -sSL -O "$URL"
     chmod 755 "${FILE_NAME}"
   fi
 
   if [ ! -f "${FILE_NAME}.sha256" ] ; then
-    curl -sSL -o "${FILE_NAME}.sha256" "$URL.sha256"
+    curl -sSL -O "$URL.sha256"
   fi
 
   sha256sum -c "${FILE_NAME}.sha256"
