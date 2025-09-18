@@ -3,9 +3,9 @@
 set -eo pipefail
 
 if [[ "${OSTYPE}" == *"darwin"* ]] ; then
-  OS="Darwin"
+  OS="darwin"
 else
-  OS="Linux"
+  OS="linux"
   MACHINE_TYPE="$(uname -m)"
   case "$MACHINE_TYPE" in
       amd64 | x86_64 | x64)
@@ -21,7 +21,7 @@ else
   esac
 fi
 
-if [[ $OS == "Darwin" ]]; then
+if [[ $OS == "darwin" ]]; then
   if ! command -v hadolint &>/dev/null; then
     if command -v brew &>/dev/null; then
       brew install --quiet hadolint
