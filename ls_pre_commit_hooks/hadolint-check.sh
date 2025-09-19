@@ -33,13 +33,15 @@ if [[ $OS == "Darwin" ]]; then
   CMD="hadolint"
 else
   HADOLINT_VERSION="v2.13.1"
-  HADOLINT_FILE_NAME="hadolint"
+  HADOLINT_EXEC_NAME="hadolint"
+  # Replace dots with dashes for directory name, curl in CircleCI has issues with dots in directory names
+  HADOLINT_DIR=".cache/hadolint-${HADOLINT_VERSION//./-}"
   URL="https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-${OS}-${ARCH}"
 
-  mkdir -p ".cache/hadolint-${HADOLINT_VERSION}"
-  pushd ".cache/hadolint-${HADOLINT_VERSION}" > /dev/null
+  mkdir -p "${HADOLINT_DIR}"
+  pushd "${HADOLINT_DIR}" > /dev/null
 
-  if [ ! -f "${HADOLINT_FILE_NAME}" ] ; then
+  if [ ! -f "${HADOLINT_EXEC_NAME}" ] ; then
     echo "Fetching hadolint from ${URL}"
     # Getting a real file name (avoiding possible file name changes, if that happens, the sha256 check will fail)
     DOWNLOADED_FILE_NAME=$(curl -sSLJ -O -w '%{filename_effective}' "$URL")
@@ -48,10 +50,10 @@ else
     curl -sSL -O "$URL.sha256"
     sha256sum -c "${DOWNLOADED_FILE_NAME}.sha256"
 
-    mv "${DOWNLOADED_FILE_NAME}" "${HADOLINT_FILE_NAME}"
+    mv "${DOWNLOADED_FILE_NAME}" "${HADOLINT_EXEC_NAME}"
   fi
 
-  CMD=".cache/hadolint-${HADOLINT_VERSION}/${HADOLINT_FILE_NAME}"
+  CMD="${HADOLINT_DIR}/${HADOLINT_EXEC_NAME}"
   popd > /dev/null
 fi
 
