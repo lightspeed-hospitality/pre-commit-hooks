@@ -47,8 +47,8 @@ else
     DOWNLOADED_FILE_NAME=$(curl -sSLJ -O -w '%{filename_effective}' "$URL")
     chmod 755 "${DOWNLOADED_FILE_NAME}"
 
-    curl -sSL -O "$URL.sha256"
-    sha256sum -c "${DOWNLOADED_FILE_NAME}.sha256"
+    SHA_FILE_NAME=$(curl -sSLJ -O -w '%{filename_effective}' "$URL.sha256")
+    sha256sum -c "${SHA_FILE_NAME}"
 
     mv "${DOWNLOADED_FILE_NAME}" "${HADOLINT_EXEC_NAME}"
   fi
