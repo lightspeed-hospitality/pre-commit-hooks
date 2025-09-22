@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: .
-    rev: v0.7.20
+    rev: v0.7.43
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
