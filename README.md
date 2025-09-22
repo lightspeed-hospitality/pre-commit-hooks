@@ -7,11 +7,11 @@ A collection of useful git hooks for use with [pre-commit](https://pre-commit.co
 
 ## Use `pre-commit` in other repos
 
-Create or append to your `.pre-commit-config.yaml` configuration:
+Create or append to your `.pre-commit-config.yaml` configuration with the latest version (e.g. v0.7.43):
 
 ```yaml
 - repo: https://github.com/lightspeed-hospitality/pre-commit-hooks
-  rev: v0.6.0
+  rev: v0.7.43
   hooks:
   - id: circleci-config-pack
   - id: circleci-config-validate
