@@ -3,6 +3,8 @@ set -e
 
 LINTER_TAG="${OPENAPI_LINTER_VERSION:-169-f3bf5c4}"
 LINTER_IMAGE="809245501444.dkr.ecr.us-east-1.amazonaws.com/release/internal/image/openapi-linter"
+# LC_ALL=C ensures this will work on MacOS as well (no harm on linux)
+RANDOM_SUFFIX=$(LC_ALL=C tr -dc 'A-Z0-9' < /dev/random | head -c 16)
 
 container_exists() {
   if [ "$(docker ps -a -f name="$1" | wc -l)" -eq 2 ]; then
@@ -17,8 +19,7 @@ run_circle_ci() {
   # See here https://circleci.com/docs/building-docker-images/#mounting-folders for details.
   linter="$1"
   docker_image="$2"
-  random_suffix=$(uuidgen | tr -d '-')
-  container_name="${linter}-linter-volume-${random_suffix}"
+  container_name="${linter}-linter-volume-${RANDOM_SUFFIX}"
 
   shift 2
 
@@ -39,8 +40,7 @@ run_circle_ci() {
 run_local() {
   linter="$1"
   docker_image="$2"
-  random_suffix=$(uuidgen | tr -d '-')
-  container_name="${linter}-linter-${random_suffix}"
+  container_name="${linter}-linter-${RANDOM_SUFFIX}"
 
   shift 2
 
