@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 
 if ! command -v tidy &>/dev/null; then
+  echo "tidy not found, installing it..."
   if command -v brew &>/dev/null; then
+    echo "...using brew"
     brew install tidy-html5
+  elif command -v apt-get &>/dev/null; then
+    echo "...using apt-get"
+    sudo apt-get -qq update &>/dev/null;
+    sudo apt-get -qqy install tidy
   else
     >&2 echo 'tidy command not found. Get tidy from https://www.html-tidy.org/.'
+    exit 1
   fi
-  exit 1
 fi
 
 tidy_config=$(mktemp)
