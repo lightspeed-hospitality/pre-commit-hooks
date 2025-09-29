@@ -13,6 +13,9 @@ fi
 if ! command -v shfmt >/dev/null 2>&1; then
   if command -v brew &>/dev/null; then
     brew install shfmt
+  elif command -v apt-get &>/dev/null; then
+    sudo apt-get update
+    sudo apt-get -qqy install shfmt
   else
     >&2 echo 'This check needs shfmt from https://github.com/mvdan/sh/releases or brew install shfmt'
   fi
