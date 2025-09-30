@@ -4,20 +4,22 @@ set -eo pipefail
 CMD="hadolint"
 
 if ! command -v ${CMD} &>/dev/null; then
-  case "$(uname -m)" in
-      x86_64|amd64|x64) ARCH="x86_64" ;;
-      aarch64|arm64) ARCH="arm64" ;;
-      *) echo "Unknown machine type: $(uname -m)"; exit 1 ;;
-  esac
-  case "$(uname)" in
-      Darwin) OS="macos" ;;
-      Linux) OS="linux" ;;
-      *) echo "Unknown OS: $(uname)"; exit 1 ;;
-  esac
-
   if command -v brew &>/dev/null; then
     brew install --quiet ${CMD}
   else
+
+    case "$(uname -m)" in
+          x86_64|amd64|x64) ARCH="x86_64" ;;
+          aarch64|arm64) ARCH="arm64" ;;
+          *) echo "Unknown machine type: $(uname -m)"; exit 1 ;;
+    esac
+
+    case "$(uname)" in
+      Darwin) OS="macos" ;;
+      Linux) OS="linux" ;;
+      *) echo "Unknown OS: $(uname)"; exit 1 ;;
+    esac
+
     VERSION="v2.13.1"
 
     URL="https://github.com/hadolint/hadolint/releases/download/${VERSION}/${CMD}-${OS}-${ARCH}"

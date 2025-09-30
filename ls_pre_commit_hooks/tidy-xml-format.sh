@@ -1,16 +1,6 @@
 #!/usr/bin/env bash
 CMD="tidy"
 if ! command -v ${CMD} &>/dev/null; then
-  case "$(uname -m)" in
-      x86_64|amd64|x64) ARCH="x86_64" ;;
-      aarch64|arm64) ARCH="arm64" ;;
-      *) echo "Unknown machine type: $(uname -m)"; exit 1 ;;
-  esac
-  case "$(uname)" in
-      Darwin) OS="macos" ;;
-      Linux) OS="Linux" ;;
-      *) echo "Unknown OS: $(uname)"; exit 1 ;;
-  esac
 
   if command -v brew &>/dev/null; then
     brew install --quiet ${CMD}
@@ -20,11 +10,17 @@ if ! command -v ${CMD} &>/dev/null; then
       exit 1
     fi
 
+    case "$(uname)" in
+        Darwin) OS="macos" ;;
+        Linux) OS="Linux" ;;
+        *) echo "Unknown OS: $(uname)"; exit 1 ;;
+    esac
+
     VERSION="v5.8.0"
 
     URL="https://github.com/htacg/tidy-html5/releases/download/${VERSION}/tidy-${VERSION}-${OS}-64bit.deb"
     mkdir "/tmp/${CMD}"
-    cd "/tmp/${CMD}"
+    pushd "/tmp/${CMD}"
     # Getting a real file name (avoiding possible file name changes, if that happens, the sha256 check will fail)
     DOWNLOADED_FILE_NAME=$(curl -sSLJ -O -w '%{filename_effective}' "$URL")
     dpkg-deb -x ${DOWNLOADED_FILE_NAME} .
@@ -33,6 +29,8 @@ if ! command -v ${CMD} &>/dev/null; then
     sha256sum -c "${SHA_FILE_NAME}"
 
     sudo cp -a usr/. /usr/local/
+
+    popd
   fi
 fi
 
