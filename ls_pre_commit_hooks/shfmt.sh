@@ -27,16 +27,19 @@ if ! command -v ${CMD} &>/dev/null; then
     VERSION="v3.12.0"
 
     URL="https://github.com/mvdan/sh/releases/download/${VERSION}/${CMD}_${VERSION}_${OS}_${ARCH}"
+    mkdir /tmp/hadolint
+    pushd /tmp/hadolint
 
     echo "Fetching ${CMD} from ${URL}"
     # Getting a real file name (avoiding possible file name changes, if that happens, the sha256 check will fail)
-    DOWNLOADED_FILE_NAME=$(curl -sSLJ -O -w '%{filename_effective}' "$URL")
+    DOWNLOADED_FILE_NAME=$(curl -sSLJ --fail-with-body -O -w '%{filename_effective}' "$URL")
     chmod 755 "${DOWNLOADED_FILE_NAME}"
 
-    SHA_FILE_NAME=$(curl -sSLJ -O -w '%{filename_effective}' "$URL.sha256")
+    SHA_FILE_NAME=$(curl -sSLJ --fail-with-body -O -w '%{filename_effective}' "$URL.sha256")
     sha256sum -c "${SHA_FILE_NAME}"
 
-    sudo mv "${DOWNLOADED_FILE_NAME}" "/usr/local/bin/${CMD}"
+    cp "${DOWNLOADED_FILE_NAME}" "${HOME}/.local/bin/${CMD}"
+    popd
   fi
 fi
 
