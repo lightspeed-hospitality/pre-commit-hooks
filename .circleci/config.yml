@@ -29,11 +29,20 @@ jobs:
       - run:
           name: Get latest release
           command: |
-            gh release view --json tagName --jq .tagName > LATEST_RELEASE
+            LATEST_RELEASE=$(gh release view --json tagName --jq .tagName)
+            echo "export LATEST_RELEASE=$LATEST_RELEASE" >> $BASH_ENV
+      - run:
+          name: Check if release exists
+          command: |
+            if [ -z "$LATEST_RELEASE" ]; then
+              echo "No latest release found, exiting early"
+              exit 1
+            fi
+            echo "Latest release found: $LATEST_RELEASE"
       - run:
           name: Create PR for new release
           command: |
-            export BRANCH_NAME="bump-pre-commit-hooks-to-$(cat LATEST_RELEASE)"
+            export BRANCH_NAME="bump-pre-commit-hooks-to-$LATEST_RELEASE"
             rt gh multi-edit \
             --branch "$BRANCH_NAME" \
             --commit-message "NOJIRA Bump pre-commit hooks" \
@@ -41,7 +50,7 @@ jobs:
             --pr-description "A new version of pre-commit hooks is available." \
             --apply-labels "⚠️ E2E Not Required" \
             --file-path ".pre-commit-config.yaml" \
-            --auto-replace-with "$(cat LATEST_RELEASE)" \
+            --auto-replace-with "$LATEST_RELEASE" \
             --regex "(?<=^(\s*-\s*repo:\s*https://github\.com/lightspeed-hospitality/pre-commit-hooks\.git\n\s*rev:\s*))[^\n\s]+" \
             --run-commands "pre-commit install" \
             --run-commands "pre-commit run" \
