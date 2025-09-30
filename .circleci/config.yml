@@ -2,6 +2,7 @@
 version: 2.1
 orbs:
   lsk-python: lsk/python@2.0
+  gh: circleci/github-cli@2.7.2
 
 jobs:
   create-prs:
@@ -10,6 +11,8 @@ jobs:
       tag: "3.13"
     steps:
       - checkout
+      - gh/install
+      - gh/setup
       - lsk-python/install-uv
       - get-codeartifact-token
       - add-codeartifact-uv
@@ -25,7 +28,26 @@ jobs:
           name: Install repo-tools
           command: |
             sudo uv pip install --system --config-file ~/.config/uv/config.toml repo-tools
-
+      - run:
+          name: Get latest release
+          command: |
+            gh release view --json tagName --jq .tagName > LATEST_RELEASE
+      - run:
+          name: Create PR for new release
+          command: |
+            export BRANCH_NAME="bump-pre-commit-hooks-to-$(cat LATEST_RELEASE)"
+            rt gh multi-edit \
+            --branch "$BRANCH_NAME" \
+            --commit-message "NOJIRA Bump pre-commit hooks" \
+            --pr-description "A new version of pre-commit hooks is available." \
+            --apply-labels "⚠️ E2E Not Required" \
+            --file-path ".pre-commit-config.yaml" \
+            --auto-replace-with "$(cat LATEST_RELEASE)" \
+            --regex "(?<=^(\s*-\s*repo:\s*https://github\.com/lightspeed-hospitality/pre-commit-hooks\.git\n\s*rev:\s*))[^\n\s]+" \
+            --run-commands "pre-commit install" \
+            --run-commands "pre-commit run" \
+            --yes \
+            "repo: https://github.com/lightspeed-hospitality/pre-commit-hooks.git"
 
 workflows:
   main:
@@ -33,16 +55,18 @@ workflows:
       - lsk-python/pre-commit:
           context: global
           executor-name: "python-3-9"
+  auto-pr:
+    triggers:
+      - schedule:
+          cron: "0 12 * * *" # every day at noon
           filters:
-            tags:
-              only: /^v.*/
             branches:
-              only: /.*/
+              only:
+                - main
+    jobs:
       - create-prs:
-          requires:
-            - lsk-python/pre-commit
+          context: global
           filters:
-            tags:
-              only: /^v.*/
             branches:
-              ignore: /.*/
+              only:
+                - main
