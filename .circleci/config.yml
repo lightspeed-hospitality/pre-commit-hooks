@@ -51,7 +51,7 @@ jobs:
             --apply-labels "⚠️ E2E Not Required" \
             --file-path ".pre-commit-config.yaml" \
             --auto-replace-with "$LATEST_RELEASE" \
-            --regex "(?<=^(\s*-\s*repo:\s*https://github\.com/lightspeed-hospitality/pre-commit-hooks\.git\n\s*rev:\s*))[^\n\s]+" \
+            --regex "^(?P<prefix>\s*-\s*repo:\s*https://github\.com/lightspeed-hospitality/pre-commit-hooks\.git\n\s*rev:\s*)[^\n\s]+(?=\n)" \
             --run-commands "pre-commit install" \
             --run-commands "pre-commit run" \
             --keep_repos false \
