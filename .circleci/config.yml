@@ -14,8 +14,8 @@ jobs:
       - gh/install
       - gh/setup
       - lsk-python/install-uv
-      - get-codeartifact-token
-      - add-codeartifact-uv
+      - lsk-python/get-codeartifact-token
+      - lsk-python/add-codeartifact-uv
       - run:
           name: Create uv config file
           command: |
@@ -47,6 +47,7 @@ jobs:
             --regex "(?<=^(\s*-\s*repo:\s*https://github\.com/lightspeed-hospitality/pre-commit-hooks\.git\n\s*rev:\s*))[^\n\s]+" \
             --run-commands "pre-commit install" \
             --run-commands "pre-commit run" \
+            --keep_repos false \
             --yes \
             "repo: https://github.com/lightspeed-hospitality/pre-commit-hooks.git"
 
