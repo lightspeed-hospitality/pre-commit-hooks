@@ -1,7 +1,31 @@
 ---
 version: 2.1
 orbs:
-  lsk-python: lsk/python@1.4
+  lsk-python: lsk/python@2.0
+
+jobs:
+  create-prs:
+    executor:
+      name: lsk-python/python-executor
+      tag: "3.13"
+    steps:
+      - checkout
+      - lsk-python/install-uv
+      - get-codeartifact-token
+      - add-codeartifact-uv
+      - run:
+          name: Create uv config file
+          command: |
+            mkdir -p ~/.config/uv
+            echo '[[index]]' > ~/.config/uv/config.toml
+            echo 'name = "lsk-pypi"' >> ~/.config/uv/config.toml
+            echo 'url = "https://lsk-809245501444.d.codeartifact.us-east-1.amazonaws.com/pypi/lsk-pypi/simple/"' >> ~/.config/uv/config.toml
+            echo 'default = true' >> ~/.config/uv/config.toml
+      - run:
+          name: Install repo-tools
+          command: |
+            sudo uv pip install --system --config-file ~/.config/uv/config.toml repo-tools
+
 
 workflows:
   main:
@@ -9,3 +33,16 @@ workflows:
       - lsk-python/pre-commit:
           context: global
           executor-name: "python-3-9"
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: /.*/
+      - create-prs:
+          requires:
+            - lsk-python/pre-commit
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
