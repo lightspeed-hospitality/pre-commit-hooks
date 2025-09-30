@@ -39,6 +39,7 @@ jobs:
             rt gh multi-edit \
             --branch "$BRANCH_NAME" \
             --commit-message "NOJIRA Bump pre-commit hooks" \
+            --org "lightspeed-hospitality" \
             --pr-description "A new version of pre-commit hooks is available." \
             --apply-labels "⚠️ E2E Not Required" \
             --file-path ".pre-commit-config.yaml" \
