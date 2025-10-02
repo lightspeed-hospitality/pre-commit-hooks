@@ -26,14 +26,11 @@ jobs:
             echo '[[index]]' >> ~/.config/uv/config.toml
             echo 'name = "pypi"' >> ~/.config/uv/config.toml
             echo 'url = "https://pypi.org/simple/"' >> ~/.config/uv/config.toml
-            # Workaround for pyyaml build isolation issue
-            echo '' >> ~/.config/uv/config.toml
-            echo 'no-build-isolation-package = ["pyyaml"]' >> ~/.config/uv/config.toml
       - run:
           name: Install repo-tools
           command: |
             UV_PATH=$(command -v uv 2>/dev/null || echo "${HOME}/.local/bin/uv")
-            $UV_PATH pip install --target "$(python3 -m site --user-site)" --config-file ~/.config/uv/config.toml repo-tools
+            $UV_PATH pip install --target "$(python3 -m site --user-site)" --config-file ~/.config/uv/config.toml --no-build-isolation-package pyyaml repo-tools
       - run:
           name: Get latest release
           command: |
