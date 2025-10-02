@@ -77,3 +77,7 @@ workflows:
           #   branches:
           #     only:
           #       - main
+  auto-pr-test:
+    jobs:
+      - create-prs:
+          context: global
