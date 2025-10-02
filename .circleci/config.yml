@@ -6,7 +6,7 @@ orbs:
 
 jobs:
   create-prs:
-    executor: lsk-python/python-3-11
+    executor: lsk-python/python-3-10
     steps:
       - checkout
       - gh/install
