@@ -30,8 +30,8 @@ jobs:
           name: Install repo-tools
           command: |
             UV_PATH=$(command -v uv 2>/dev/null || echo "${HOME}/.local/bin/uv")
-            $UV_PATH venv ~/venv
-            source ~/venv/bin/activate
+            $UV_PATH venv venv
+            source venv/bin/activate
             $UV_PATH pip install setuptools wheel
             $UV_PATH pip install --config-file ~/.config/uv/config.toml --no-build-isolation-package pyyaml repo-tools
       - run:
@@ -50,7 +50,7 @@ jobs:
       - run:
           name: Create PR for new release
           command: |
-            source ~/venv/bin/activate
+            source venv/bin/activate
             export BRANCH_NAME="bump-pre-commit-hooks-to-$LATEST_RELEASE"
             python3 -m rt gh multi-edit \
             --branch "$BRANCH_NAME" \
