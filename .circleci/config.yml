@@ -48,7 +48,7 @@ jobs:
           name: Create PR for new release
           command: |
             export BRANCH_NAME="bump-pre-commit-hooks-to-$LATEST_RELEASE"
-            rt gh multi-edit \
+            python3 -m rt gh multi-edit \
             --branch "$BRANCH_NAME" \
             --commit-message "NOJIRA Bump pre-commit hooks" \
             --org "lightspeed-hospitality" \
