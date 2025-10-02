@@ -47,12 +47,13 @@ jobs:
             --branch "$BRANCH_NAME" \
             --commit-message "NOJIRA Bump pre-commit hooks" \
             --org "lightspeed-hospitality" \
-            --pr-description "A new version of pre-commit hooks is available." \
+            --pr-description "A new version of pre-commit hooks is available. Please take care of testing and merging this PR yourselves." \
             --apply-labels "⚠️ E2E Not Required" \
             --file-path ".pre-commit-config.yaml" \
             --auto-replace-with "\g<prefix>$LATEST_RELEASE" \
             --regex "^(?P<prefix>\s*-\s*repo:\s*https://github\.com/lightspeed-hospitality/pre-commit-hooks\.git\n\s*rev:\s*)[^\n\s]+(?=\n)" \
             --yes \
+            --dry-run \
             "https://github.com/lightspeed-hospitality/pre-commit-hooks.git"
 
 workflows:
@@ -72,7 +73,7 @@ workflows:
     jobs:
       - create-prs:
           context: global
-          filters:
-            branches:
-              only:
-                - main
+          # filters:
+          #   branches:
+          #     only:
+          #       - main
