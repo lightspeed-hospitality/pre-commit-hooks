@@ -26,6 +26,7 @@ jobs:
             echo '[[index]]' >> ~/.config/uv/config.toml
             echo 'name = "pypi"' >> ~/.config/uv/config.toml
             echo 'url = "https://pypi.org/simple/"' >> ~/.config/uv/config.toml
+            # Workaround for pyyaml build isolation issue
             echo '' >> ~/.config/uv/config.toml
             echo 'no-build-isolation-package = ["pyyaml"]' >> ~/.config/uv/config.toml
       - run:
