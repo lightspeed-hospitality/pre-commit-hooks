@@ -30,7 +30,7 @@ jobs:
           name: Install repo-tools
           command: |
             UV_PATH=$(command -v uv 2>/dev/null || echo "${HOME}/.local/bin/uv")
-            $UV_PATH pip install --target "$(python3 -m site --user-site)" --config-file ~/.config/uv/config.toml --no-build-isolation-package pyyaml repo-tools
+            $UV_PATH pip install --config-file ~/.config/uv/config.toml --no-build-isolation-package pyyaml repo-tools
       - run:
           name: Get latest release
           command: |
