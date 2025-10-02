@@ -25,7 +25,8 @@ jobs:
       - run:
           name: Install repo-tools
           command: |
-            sudo uv pip install --system --config-file ~/.config/uv/config.toml repo-tools
+            UV_PATH=$(command -v uv 2>/dev/null || echo "${HOME}/.local/bin/uv")
+            $UV_PATH pip install --target "$(python3 -m site --user-site)" --config-file ~/.config/uv/config.toml repo-tools
       - run:
           name: Get latest release
           command: |
