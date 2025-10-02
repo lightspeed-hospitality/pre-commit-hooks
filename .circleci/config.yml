@@ -32,6 +32,7 @@ jobs:
             UV_PATH=$(command -v uv 2>/dev/null || echo "${HOME}/.local/bin/uv")
             $UV_PATH venv ~/venv
             source ~/venv/bin/activate
+            $UV_PATH pip install setuptools wheel
             $UV_PATH pip install --config-file ~/.config/uv/config.toml --no-build-isolation-package pyyaml repo-tools
       - run:
           name: Get latest release
