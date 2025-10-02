@@ -1,7 +1,69 @@
 ---
 version: 2.1
 orbs:
-  lsk-python: lsk/python@1.4
+  lsk-python: lsk/python@2.0
+  gh: circleci/github-cli@2.7.2
+
+jobs:
+  create-prs:
+    executor: lsk-python/python-3-10
+    steps:
+      - checkout
+      - gh/install
+      - gh/setup
+      - lsk-python/install-uv
+      - lsk-python/get-codeartifact-token
+      - lsk-python/add-codeartifact-uv
+      - run:
+          name: Create uv config file
+          command: |
+            mkdir -p ~/.config/uv
+            echo '[[index]]' > ~/.config/uv/config.toml
+            echo 'name = "lsk-pypi"' >> ~/.config/uv/config.toml
+            echo 'url = "https://lsk-809245501444.d.codeartifact.us-east-1.amazonaws.com/pypi/lsk-pypi/simple/"' >> ~/.config/uv/config.toml
+            echo 'default = true' >> ~/.config/uv/config.toml
+            echo '' >> ~/.config/uv/config.toml
+            echo '[[index]]' >> ~/.config/uv/config.toml
+            echo 'name = "pypi"' >> ~/.config/uv/config.toml
+            echo 'url = "https://pypi.org/simple/"' >> ~/.config/uv/config.toml
+      - run:
+          name: Install repo-tools
+          command: |
+            UV_PATH=$(command -v uv 2>/dev/null || echo "${HOME}/.local/bin/uv")
+            $UV_PATH venv venv
+            source venv/bin/activate
+            $UV_PATH pip install setuptools wheel
+            $UV_PATH pip install --config-file ~/.config/uv/config.toml --no-build-isolation-package pyyaml repo-tools
+      - run:
+          name: Get latest release
+          command: |
+            LATEST_RELEASE=$(gh release view --json tagName --jq .tagName)
+            echo "export LATEST_RELEASE=$LATEST_RELEASE" >> $BASH_ENV
+      - run:
+          name: Check if release exists
+          command: |
+            if [ -z "$LATEST_RELEASE" ]; then
+              echo "No latest release found, exiting early"
+              exit 1
+            fi
+            echo "Latest release found: $LATEST_RELEASE"
+      - run:
+          name: Create PR for new release
+          command: |
+            source venv/bin/activate
+            export BRANCH_NAME="bump-pre-commit-hooks-to-$LATEST_RELEASE"
+            python3 -m rt gh multi-edit \
+            --branch "$BRANCH_NAME" \
+            --commit-message "NOJIRA Bump pre-commit hooks" \
+            --org "lightspeed-hospitality" \
+            --pr-description "A new version of pre-commit hooks is available. Please take care of testing and merging this PR yourselves." \
+            --apply-labels "⚠️ E2E Not Required" \
+            --file-path ".pre-commit-config.yaml" \
+            --auto-replace-with "\g<prefix>$LATEST_RELEASE" \
+            --regex "^(?P<prefix>\s*-\s*repo:\s*https://github\.com/lightspeed-hospitality/pre-commit-hooks\.git\n\s*rev:\s*)[^\n\s]+(?=\n)" \
+            --yes \
+            --dry-run \
+            "https://github.com/lightspeed-hospitality/pre-commit-hooks.git"
 
 workflows:
   main:
@@ -9,3 +71,22 @@ workflows:
       - lsk-python/pre-commit:
           context: global
           executor-name: "python-3-9"
+  auto-pr:
+    triggers:
+      - schedule:
+          cron: "0 12 * * *" # every day at noon
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - create-prs:
+          context: global
+          # filters:
+          #   branches:
+          #     only:
+          #       - main
+  auto-pr-test:
+    jobs:
+      - create-prs:
+          context: global
