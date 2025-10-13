@@ -113,15 +113,14 @@
   name: Format XML with Tidy
   entry: ls_pre_commit_hooks/tidy-xml-format.sh
   language: script
-  types: [text]
-  files: \.(xml)$
-  stages: [commit, push, manual]
+  types: [xml]
+  stages: [pre-commit, pre-merge-commit, pre-push, manual]
 - id: yamllint
   name: yamllint
   description: This hook runs yamllint.
   entry: yamllint
   language: python
-  types: [file, yaml]
+  types: [yaml]
 - id: checkstyle
   name: checkstyle
   description: |
@@ -360,7 +359,7 @@
     - '@prettier/plugin-xml@2.2.0'
   entry: prettier --write --list-different --ignore-unknown
   language: node
-  files: \.xml$
+  types: [xml]
   args: ["--xml-whitespace-sensitivity", "ignore"]
 - id: spotless-apply
   name: spotless-apply
@@ -369,6 +368,7 @@
     mvn executable is expected to be installed.
   entry: ls_pre_commit_hooks/spotless-apply.sh
   language: script
+  files: '^.*/src/.*$'
   pass_filenames: false
 # Based on https://github.com/hadolint/hadolint/blob/024fd640378acd5d8218f77ec2c744826cdda5ce/.pre-commit-hooks.yaml
 # But with a pinned version for the docker image
