@@ -114,6 +114,7 @@
   entry: ls_pre_commit_hooks/tidy-xml-format.sh
   language: script
   types: [xml]
+  require_serial: true
   stages: [pre-commit, pre-merge-commit, pre-push, manual]
 - id: yamllint
   name: yamllint
