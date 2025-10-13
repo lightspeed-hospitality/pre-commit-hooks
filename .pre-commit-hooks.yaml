@@ -56,7 +56,7 @@
   language: script
   types: [text]
   files: \.(java)$
-  stages: [commit, push, manual]
+  stages: [pre-commit, pre-push, manual]
   require_serial: true
 - id: isort
   name: isort
@@ -113,15 +113,16 @@
   name: Format XML with Tidy
   entry: ls_pre_commit_hooks/tidy-xml-format.sh
   language: script
-  types: [text]
-  files: \.(xml)$
-  stages: [commit, push, manual]
+  types: [xml]
+  # the script might install tidy, so we need to run it in a separate process and not in parallel to prevent a race condition.
+  require_serial: true
+  stages: [pre-commit, pre-merge-commit, pre-push, manual]
 - id: yamllint
   name: yamllint
   description: This hook runs yamllint.
   entry: yamllint
   language: python
-  types: [file, yaml]
+  types: [yaml]
 - id: checkstyle
   name: checkstyle
   description: |
@@ -172,7 +173,7 @@
     entry: check-executables-have-shebangs
     language: python
     types: [text, executable]
-    stages: [commit, push, manual]
+    stages: [pre-commit, pre-push, manual]
 -   id: check-json
     name: check json
     description: checks json files for parseable syntax.
@@ -185,7 +186,7 @@
     entry: check-shebang-scripts-are-executable
     language: python
     types: [text]
-    stages: [commit, push, manual]
+    stages: [pre-commit, pre-push, manual]
 -   id: pretty-format-json
     name: pretty format json
     description: sets a standard for formatting json files.
@@ -264,7 +265,7 @@
     entry: end-of-file-fixer
     language: python
     types: [text]
-    stages: [commit, push, manual]
+    stages: [pre-commit, pre-push, manual]
 -   id: file-contents-sorter
     name: file contents sorter
     description: sorts the lines in specified files (defaults to alphabetical). you must provide list of target files as input in your .pre-commit-config.yaml file.
@@ -325,7 +326,7 @@
     entry: trailing-whitespace-fixer
     language: python
     types: [text]
-    stages: [commit, push, manual]
+    stages: [pre-commit, pre-push, manual]
 -   id: plantuml-renderer
     name: plantuml renderer
     description: render plantuml file (*.puml) to svg image
@@ -360,7 +361,7 @@
     - '@prettier/plugin-xml@2.2.0'
   entry: prettier --write --list-different --ignore-unknown
   language: node
-  files: \.xml$
+  types: [xml]
   args: ["--xml-whitespace-sensitivity", "ignore"]
 - id: spotless-apply
   name: spotless-apply
@@ -369,6 +370,7 @@
     mvn executable is expected to be installed.
   entry: ls_pre_commit_hooks/spotless-apply.sh
   language: script
+  files: '^.*/src/.*$'
   pass_filenames: false
 # Based on https://github.com/hadolint/hadolint/blob/024fd640378acd5d8218f77ec2c744826cdda5ce/.pre-commit-hooks.yaml
 # But with a pinned version for the docker image
