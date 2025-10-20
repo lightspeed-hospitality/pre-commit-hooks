@@ -52,6 +52,7 @@ jobs:
           command: |
             source venv/bin/activate
             export BRANCH_NAME="bump-pre-commit-hooks-to-$LATEST_RELEASE"
+            rt config gh setup --no-use-keyring
             rt gh multi-edit \
             --branch "$BRANCH_NAME" \
             --commit-message "NOJIRA Bump pre-commit hooks" \
