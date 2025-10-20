@@ -18,12 +18,12 @@ jobs:
           name: Create uv config file
           command: |
             mkdir -p ~/.config/uv
-            echo '[[tool.uv.index]]' > ~/.config/uv/uv.toml
+            echo '[[index]]' > ~/.config/uv/uv.toml
             echo 'name = "lsk-pypi"' >> ~/.config/uv/uv.toml
             echo 'url = "https://lsk-809245501444.d.codeartifact.us-east-1.amazonaws.com/pypi/lsk-pypi/simple/"' >> ~/.config/uv/uv.toml
             echo 'default = true' >> ~/.config/uv/uv.toml
             echo '' >> ~/.config/uv/uv.toml
-            echo '[[tool.uv.index]]' >> ~/.config/uv/uv.toml
+            echo '[[index]]' >> ~/.config/uv/uv.toml
             echo 'name = "pypi"' >> ~/.config/uv/uv.toml
             echo 'url = "https://pypi.org/simple/"' >> ~/.config/uv/uv.toml
       - run:
