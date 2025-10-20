@@ -52,7 +52,7 @@ jobs:
           command: |
             source venv/bin/activate
             export BRANCH_NAME="bump-pre-commit-hooks-to-$LATEST_RELEASE"
-            python3 -m rt gh multi-edit \
+            rt gh multi-edit \
             --branch "$BRANCH_NAME" \
             --commit-message "NOJIRA Bump pre-commit hooks" \
             --org "lightspeed-hospitality" \
