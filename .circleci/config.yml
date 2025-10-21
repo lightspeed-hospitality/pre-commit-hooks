@@ -33,7 +33,7 @@ jobs:
             $UV_PATH venv venv
             source venv/bin/activate
             $UV_PATH pip install setuptools wheel
-            $UV_PATH pip install -v --no-build-isolation-package pyyaml --index-strategy unsafe-best-match "repo-tools==1.0.6.dev1091" --prerelease=allow
+            $UV_PATH pip install -v --no-build-isolation-package pyyaml --index-strategy unsafe-best-match "repo-tools==1.0.6"
       - run:
           name: Get latest release
           command: |
@@ -84,10 +84,11 @@ workflows:
     jobs:
       - create-prs:
           context: global
-          # filters:
-          #   branches:
-          #     only:
-          #       - main
+          filters:
+            branches:
+              only:
+                - main
+
   auto-pr-test:
     jobs:
       - create-prs:
