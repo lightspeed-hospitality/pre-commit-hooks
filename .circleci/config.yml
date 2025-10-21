@@ -65,7 +65,7 @@ jobs:
             --yes \
             --dry-run \
             --auth-type https \
-            "https://github.com/lightspeed-hospitality/pre-commit-hooks.git"
+            "exclude: '.*poetry.lock$'"
 
 workflows:
   main:
