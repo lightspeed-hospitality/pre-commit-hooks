@@ -63,7 +63,6 @@ jobs:
             --auto-replace-with "\g<prefix>$LATEST_RELEASE" \
             --regex "^(?P<prefix>\s*-\s*repo:\s*https://github\.com/lightspeed-hospitality/pre-commit-hooks\.git\n\s*rev:\s*)[^\n\s]+(?=\n)" \
             --yes \
-            --dry-run \
             --auth-type https \
             "exclude: '.*poetry.lock$'"
 
