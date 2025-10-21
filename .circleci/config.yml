@@ -96,4 +96,3 @@ workflows:
             branches:
               only:
                 - main
-
