@@ -15,6 +15,11 @@ jobs:
       - lsk-python/get-codeartifact-token
       - lsk-python/add-codeartifact-uv
       - run:
+          name: Configure git for private repositories
+          command: |
+            git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+            git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "git@github.com:"
+      - run:
           name: Create uv config file
           command: |
             mkdir -p ~/.config/uv
