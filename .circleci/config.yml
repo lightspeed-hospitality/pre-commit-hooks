@@ -48,6 +48,10 @@ jobs:
             fi
             echo "Latest release found: $LATEST_RELEASE"
       - run:
+          name: Setup git credentials
+          command: |
+            git config --global user.name $GITHUB_USER
+      - run:
           name: Create PR for new release
           command: |
             source venv/bin/activate
