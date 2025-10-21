@@ -73,6 +73,14 @@ workflows:
       - lsk-python/pre-commit:
           context: global
           executor-name: "python-3-9"
+      - create-prs:
+          context: global
+          requires:
+            - lsk-python/pre-commit
+          filters:
+            branches:
+              only:
+                - main
   auto-pr:
     triggers:
       - schedule:
@@ -89,7 +97,3 @@ workflows:
               only:
                 - main
 
-  auto-pr-test:
-    jobs:
-      - create-prs:
-          context: global
