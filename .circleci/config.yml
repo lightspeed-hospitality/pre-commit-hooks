@@ -50,7 +50,7 @@ jobs:
       - run:
           name: Setup git credentials
           command: |
-            git config --global user.name $GITHUB_USER
+            echo "export GIT_USER=$GITHUB_USER" >> $BASH_ENV
       - run:
           name: Create PR for new release
           command: |
