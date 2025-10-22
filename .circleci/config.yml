@@ -33,7 +33,7 @@ jobs:
             $UV_PATH venv venv
             source venv/bin/activate
             $UV_PATH pip install setuptools wheel
-            $UV_PATH pip install -v --no-build-isolation-package pyyaml --index-strategy unsafe-best-match "repo-tools==1.0.7.dev1122" --prerelease=allow
+            $UV_PATH pip install -v --no-build-isolation-package pyyaml --index-strategy unsafe-best-match "repo-tools==1.0.7.dev1125" --prerelease=allow
       - run:
           name: Get latest release
           command: |
@@ -51,7 +51,7 @@ jobs:
           name: Create PR for new release
           command: |
             source venv/bin/activate
-            export BRANCH_NAME="testing-throwaway-pre-commit-hooks-$LATEST_RELEASE"
+            export BRANCH_NAME="testing-throwaway2-pre-commit-hooks-$LATEST_RELEASE"
             export GITHUB_EMAIL="sre-github-hospitality-user@lightspeedhq.com"
             rt config gh setup --no-use-keyring --signing-strategy db_api
             rt gh multi-edit \
