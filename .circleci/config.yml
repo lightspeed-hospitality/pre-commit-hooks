@@ -33,7 +33,7 @@ jobs:
             $UV_PATH venv venv
             source venv/bin/activate
             $UV_PATH pip install setuptools wheel
-            $UV_PATH pip install -v --no-build-isolation-package pyyaml --index-strategy unsafe-best-match "repo-tools==1.0.6"
+            $UV_PATH pip install -v --no-build-isolation-package pyyaml --index-strategy unsafe-best-match "repo-tools==1.0.7.dev1106" --allow-preleases
       - run:
           name: Get latest release
           command: |
@@ -51,9 +51,9 @@ jobs:
           name: Create PR for new release
           command: |
             source venv/bin/activate
-            export BRANCH_NAME="bump-pre-commit-hooks-to-$LATEST_RELEASE"
+            export BRANCH_NAME="testing-throwaway-pre-commit-hooks-$LATEST_RELEASE"
             export GITHUB_EMAIL="sre-github-hospitality-user@lightspeedhq.com"
-            rt config gh setup --no-use-keyring
+            rt config gh setup --no-use-keyring --signing-strategy db_api
             rt gh multi-edit \
             --branch "$BRANCH_NAME" \
             --commit-message "NOJIRA Bump pre-commit hooks" \
@@ -65,7 +65,7 @@ jobs:
             --regex "^(?P<prefix>\s*-\s*repo:\s*https://github\.com/lightspeed-hospitality/pre-commit-hooks\.git\n\s*rev:\s*)[^\n\s]+(?=\n)" \
             --yes \
             --auth-type https \
-            "https://github.com/lightspeed-hospitality/pre-commit-hooks.git"
+            "exclude: '.*poetry.lock$'"
 
 workflows:
   main:
@@ -96,3 +96,7 @@ workflows:
             branches:
               only:
                 - main
+  auto-pr-test:
+    jobs:
+      - create-prs:
+          context: global
