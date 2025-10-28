@@ -21,9 +21,25 @@ FILE_NAME="google-java-format-${FORMATTER_VERSION}-all-deps.jar"
 
 if [ ! -f "${FILE_NAME}" ]
 then
-    URL=$(curl "https://api.github.com/repos/google/google-java-format/releases" \
-      | jq -r ".[]|select (.name == \"${FORMATTER_VERSION}\")|.assets[]| select (.name| contains(\"all-deps.jar\"))|.browser_download_url")
-    curl -LJO -o "${FILE_NAME}" "${URL}"
+    # Try direct download URL first (avoids GitHub API pagination and rate limits)
+    DIRECT_URL_V="https://github.com/google/google-java-format/releases/download/v${FORMATTER_VERSION}/google-java-format-${FORMATTER_VERSION}-all-deps.jar"
+    if ! curl -fSL -o "${FILE_NAME}" "${DIRECT_URL_V}"; then
+        # Some releases use a non-v tag: google-java-format-${VERSION}
+        DIRECT_URL_GJF="https://github.com/google/google-java-format/releases/download/google-java-format-${FORMATTER_VERSION}/google-java-format-${FORMATTER_VERSION}-all-deps.jar"
+        if ! curl -fSL -o "${FILE_NAME}" "${DIRECT_URL_GJF}"; then
+            # Fallbacks: query GitHub API for the specific tag, then find the asset URL
+            URL=$(curl -fsSL "https://api.github.com/repos/google/google-java-format/releases/tags/v${FORMATTER_VERSION}" \
+              | jq -r ".assets[] | select(.name | contains(\"all-deps.jar\")) | .browser_download_url" | head -n1)
+            if [ -z "${URL}" ] || ! curl -fSL -o "${FILE_NAME}" "${URL}"; then
+                URL=$(curl -fsSL "https://api.github.com/repos/google/google-java-format/releases/tags/google-java-format-${FORMATTER_VERSION}" \
+                  | jq -r ".assets[] | select(.name | contains(\"all-deps.jar\")) | .browser_download_url" | head -n1)
+                if [ -z "${URL}" ] || ! curl -fSL -o "${FILE_NAME}" "${URL}"; then
+                    echo "Failed to download google-java-format ${FORMATTER_VERSION}. Please check the version exists (tried tag v${FORMATTER_VERSION} and google-java-format-${FORMATTER_VERSION})." >&2
+                    exit 1
+                fi
+            fi
+        fi
+    fi
     chmod 755 "${FILE_NAME}"
 fi
 popd > /dev/null
