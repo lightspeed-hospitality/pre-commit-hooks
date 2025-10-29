@@ -31,7 +31,7 @@ then
     MAX_PAGES=5
 
     # Search through pages until we find the version
-    while [ -z "$URL" ] && [ $PAGE -le $MAX_PAGES ]; do
+    while [ -z "$URL" ] && [ "$PAGE" -le "$MAX_PAGES" ]; do
         echo "Searching for version ${FORMATTER_VERSION} on page ${PAGE}..."
 
         # Try to find the release with either version format
