@@ -34,14 +34,17 @@ then
     while [ -z "$URL" ] && [ "$PAGE" -le "$MAX_PAGES" ]; do
         echo "Searching for version ${FORMATTER_VERSION} on page ${PAGE}..."
 
+        # Fetch releases JSON once per page
+        RELEASES_JSON=$(curl -s "https://api.github.com/repos/google/google-java-format/releases?page=${PAGE}")
+
         # Try to find the release with either version format
-        URL=$(curl -s "https://api.github.com/repos/google/google-java-format/releases?page=${PAGE}" \
+        URL=$(echo "$RELEASES_JSON" \
           | jq -r ".[]|select (.name == \"${VERSION_WITH_V}\" or .name == \"${VERSION_WITHOUT_V}\")|.assets[]| select (.name| contains(\"all-deps.jar\"))|.browser_download_url" \
           | head -n 1)
 
         if [ -z "$URL" ]; then
             # Check if we got any releases on this page
-            RELEASES_ON_PAGE=$(curl -s "https://api.github.com/repos/google/google-java-format/releases?page=${PAGE}" | jq -r 'length')
+            RELEASES_ON_PAGE=$(echo "$RELEASES_JSON" | jq -r 'length')
             if [ "$RELEASES_ON_PAGE" = "0" ] || [ "$RELEASES_ON_PAGE" = "null" ]; then
                 echo "No more releases found. Version ${FORMATTER_VERSION} not found."
                 break
