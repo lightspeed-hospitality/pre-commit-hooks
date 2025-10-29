@@ -21,8 +21,45 @@ FILE_NAME="google-java-format-${FORMATTER_VERSION}-all-deps.jar"
 
 if [ ! -f "${FILE_NAME}" ]
 then
-    URL=$(curl "https://api.github.com/repos/google/google-java-format/releases" \
-      | jq -r ".[]|select (.name == \"${FORMATTER_VERSION}\")|.assets[]| select (.name| contains(\"all-deps.jar\"))|.browser_download_url")
+    # Try both version formats: with and without 'v' prefix
+    # Newer releases use 'v' prefix (e.g., v1.32.0), older ones don't (e.g., 1.13.0)
+    VERSION_WITH_V="v${FORMATTER_VERSION}"
+    VERSION_WITHOUT_V="${FORMATTER_VERSION#v}"  # Remove 'v' if it's already there
+
+    URL=""
+    PAGE=1
+    MAX_PAGES=5
+
+    # Search through pages until we find the version
+    while [ -z "$URL" ] && [ "$PAGE" -le "$MAX_PAGES" ]; do
+        echo "Searching for version ${FORMATTER_VERSION} on page ${PAGE}..."
+
+        # Fetch releases JSON once per page
+        RELEASES_JSON=$(curl -s "https://api.github.com/repos/google/google-java-format/releases?page=${PAGE}")
+
+        # Try to find the release with either version format
+        URL=$(echo "$RELEASES_JSON" \
+          | jq -r ".[]|select (.name == \"${VERSION_WITH_V}\" or .name == \"${VERSION_WITHOUT_V}\")|.assets[]| select (.name| contains(\"all-deps.jar\"))|.browser_download_url" \
+          | head -n 1)
+
+        if [ -z "$URL" ]; then
+            # Check if we got any releases on this page
+            RELEASES_ON_PAGE=$(echo "$RELEASES_JSON" | jq -r 'length')
+            if [ "$RELEASES_ON_PAGE" = "0" ] || [ "$RELEASES_ON_PAGE" = "null" ]; then
+                echo "No more releases found. Version ${FORMATTER_VERSION} not found."
+                break
+            fi
+            PAGE=$((PAGE + 1))
+        fi
+    done
+
+    if [ -z "$URL" ]; then
+        echo "Error: Could not find google-java-format version ${FORMATTER_VERSION}"
+        popd > /dev/null
+        exit 1
+    fi
+
+    echo "Downloading from: ${URL}"
     curl -LJO -o "${FILE_NAME}" "${URL}"
     chmod 755 "${FILE_NAME}"
 fi
