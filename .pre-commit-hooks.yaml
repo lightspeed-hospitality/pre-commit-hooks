@@ -370,7 +370,7 @@
     mvn executable is expected to be installed.
   entry: ls_pre_commit_hooks/spotless-apply.sh
   language: script
-  files: '^.*/src/.*$'
+  files: ^.*/?src/.+$
   pass_filenames: false
 # Based on https://github.com/hadolint/hadolint/blob/024fd640378acd5d8218f77ec2c744826cdda5ce/.pre-commit-hooks.yaml
 # But with a pinned version for the docker image
