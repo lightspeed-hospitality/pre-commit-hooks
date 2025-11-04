@@ -37,6 +37,27 @@ then
         # Fetch releases JSON once per page
         RELEASES_JSON=$(curl -s "https://api.github.com/repos/google/google-java-format/releases?page=${PAGE}")
 
+        # Check if the response is valid JSON and not an error
+        if ! echo "$RELEASES_JSON" | jq empty 2>/dev/null; then
+            echo "ERROR: Invalid JSON response from GitHub API"
+            echo "Full response: ${RELEASES_JSON}"
+            popd > /dev/null
+            exit 1
+        fi
+
+        # Check for API error messages
+        ERROR_MESSAGE=$(echo "$RELEASES_JSON" | jq -r '.message // empty' 2>/dev/null)
+        if [ -n "$ERROR_MESSAGE" ]; then
+            echo "ERROR: GitHub API returned an error: ${ERROR_MESSAGE}"
+            # Also log documentation_url if present (common in rate limit errors)
+            DOC_URL=$(echo "$RELEASES_JSON" | jq -r '.documentation_url // empty' 2>/dev/null)
+            if [ -n "$DOC_URL" ]; then
+                echo "See: ${DOC_URL}"
+            fi
+            popd > /dev/null
+            exit 1
+        fi
+
         # Try to find the release with either version format
         URL=$(echo "$RELEASES_JSON" \
           | jq -r ".[]|select (.name == \"${VERSION_WITH_V}\" or .name == \"${VERSION_WITHOUT_V}\")|.assets[]| select (.name| contains(\"all-deps.jar\"))|.browser_download_url" \
