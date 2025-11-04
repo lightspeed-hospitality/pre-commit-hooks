@@ -26,14 +26,16 @@ Before publishing a new version (with a tag) you can test changes on this reposi
 
 ```yaml
 - repo: https://github.com/lightspeed-hospitality/pre-commit-hooks
-  rev: 4f707bc9dfeb75d70c4c37ebde63f8dc334f126d
+  rev: 4f707bc9dfeb75d70c4c37ebde63f8dc334f126d # pragma: allowlist secret
   hooks:
   - id: circleci-config-pack
   - id: circleci-config-validate
   - id: poetry-pytest
 ```
 
-`rev` can be either a tag or a commit SHA
+`rev` can be a tag or commit SHA (revision).
+Add `# pragma: allowlist secret` comment to the end of the line if you want to use the SHA.
+If you don't do this, it will be a false positive for `detect-secrets`.
 
 ### Create a new Tag/Release
 
