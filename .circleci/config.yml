@@ -9,3 +9,6 @@ workflows:
       - lsk-python/pre-commit:
           context: global
           executor-name: "python-3-9"
+          setup-steps:
+            - checkout:
+                method: full
