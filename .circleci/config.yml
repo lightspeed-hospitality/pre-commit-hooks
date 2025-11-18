@@ -1,7 +1,7 @@
 ---
 version: 2.1
 orbs:
-  lsk-python: lsk/python@1.4
+  lsk-python: lsk/python@2.0
 
 workflows:
   main:

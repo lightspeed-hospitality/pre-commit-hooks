@@ -11,12 +11,18 @@ if [ "${DEBUG}" != unset ]; then
 fi
 
 if ! command -v shfmt >/dev/null 2>&1; then
+  echo "shfmt not found, installing it..."
   if command -v brew &>/dev/null; then
+    echo "... using brew"
     brew install shfmt
+  elif command -v apt-get &>/dev/null; then
+    echo "... using apt-get"
+    sudo apt-get -qq update &>/dev/null
+    sudo apt-get -qqy install shfmt
   else
-    >&2 echo 'This check needs shfmt from https://github.com/mvdan/sh/releases or brew install shfmt'
+    >&2 echo 'This check needs shfmt from https://github.com/mvdan/sh/releases'
+    exit 1
   fi
-  exit 1
 fi
 
 readonly cmd=(shfmt "$@")
