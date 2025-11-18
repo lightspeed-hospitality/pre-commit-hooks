@@ -1,7 +1,7 @@
 ---
 version: 2.1
 orbs:
-  lsk-python: lsk/python@2.0
+  lsk-python: lsk/python@dev:LSH-31399
 
 workflows:
   main:
@@ -9,6 +9,3 @@ workflows:
       - lsk-python/pre-commit:
           context: global
           executor-name: "python-3-9"
-          setup-steps:
-            - checkout:
-                method: full
