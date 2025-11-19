@@ -36,7 +36,7 @@
   name: flake8
   description: flake8 - Python style guide enforcement
   language: python
-  language_version: python3.11
+  language_version: python3.10
   entry: flake8
   files: \.py$
 - id: ruff
