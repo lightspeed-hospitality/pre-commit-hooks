@@ -8,4 +8,5 @@ workflows:
     jobs:
       - lsk-python/pre-commit:
           context: global
-          executor-name: "python-3-9"
+          executor-name: python
+          executor-tag: "3.11"
