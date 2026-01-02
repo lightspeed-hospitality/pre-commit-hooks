@@ -16,6 +16,7 @@ mypy = "^0.961"
 isort = "^5.9.3"
 pylint = "^2.14.3"
 pre-commit-hooks = "^4.3.0"
+ruamel-yaml = ">=0.15,<0.19"
 ruff = "^0.1.2"
 
 [build-system]
