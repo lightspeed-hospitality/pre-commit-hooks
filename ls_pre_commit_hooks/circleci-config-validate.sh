@@ -45,12 +45,11 @@ if [[ ${#positional_args[@]} -eq 0 ]]; then
   usage
 fi
 
-if ! command -v brew &>/dev/null; then
-  >&2 echo 'Homebrew is required to install the supported CircleCI CLI: circleci-public/circleci/circleci@next.'
-  exit 1
-fi
-
 if ! command -v circleci &>/dev/null || ! circleci version 2>/dev/null | grep -q '^circleci 1\.'; then
+  if ! command -v brew &>/dev/null; then
+    >&2 echo 'Homebrew is required to install the supported CircleCI CLI: circleci-public/circleci/circleci@next. See https://cli.circleci.com/ for other install options.'
+    exit 1
+  fi
   brew install circleci-public/circleci/circleci@next
 fi
 
