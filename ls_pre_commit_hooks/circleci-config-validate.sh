@@ -4,12 +4,12 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-_ORG_SLUG="github/lightspeed-hospitality"
+_ORG_SLUG="gh/lightspeed-hospitality"
 
 function usage {
     echo "usage: [paths] [-h] [-o organization]"
     echo "  -h      display help"
-    echo "  -o      organization slug (default: github/lightspeed-hospitality), used when a config depends on private orbs"
+    echo "  -o      organization slug (default: gh/lightspeed-hospitality), used when a config depends on private orbs"
     exit 1
 }
 
