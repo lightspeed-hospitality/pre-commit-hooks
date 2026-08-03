@@ -4,12 +4,12 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-_ORG_SLUG="gh/lightspeed-hospitality"
+_ORG_SLUG="github/lightspeed-hospitality"
 
 function usage {
     echo "usage: [paths] [-h] [-o organization]"
     echo "  -h      display help"
-    echo "  -o      organization slug (default: gh/lightspeed-hospitality), used when a config depends on private orbs"
+    echo "  -o      organization slug (default: github/lightspeed-hospitality), used when a config depends on private orbs"
     exit 1
 }
 
@@ -40,6 +40,11 @@ fi
 
 echo 'Begin circleci config validation'
 
+if [[ ${#positional_args[@]} -eq 0 ]]; then
+  >&2 echo 'No config paths provided.'
+  usage
+fi
+
 if ! command -v brew &>/dev/null; then
   >&2 echo 'Homebrew is required to install the supported CircleCI CLI: circleci-public/circleci/circleci@next.'
   exit 1
@@ -65,5 +70,7 @@ do
     echo "${eMSG}"
     exit 1
   fi
+
+  echo "OK: ${path}"
 
 done
