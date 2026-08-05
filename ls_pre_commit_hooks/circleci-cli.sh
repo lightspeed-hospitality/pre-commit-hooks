@@ -17,6 +17,14 @@ function prefer_homebrew_circleci {
   hash -r 2>/dev/null || true
 }
 
+function restore_legacy_circleci {
+  [[ "${legacy_formula_unlinked}" -eq 1 ]] || return 0
+  if ! brew link "${_CIRCLECI_LEGACY_FORMULA}"; then
+    >&2 echo "Failed to restore the ${_CIRCLECI_LEGACY_FORMULA} formula link."
+    return 1
+  fi
+}
+
 function ensure_circleci_v1 {
   if is_circleci_v1; then
     return 0
@@ -53,8 +61,8 @@ function ensure_circleci_v1 {
   fi
 
   if ! "${cask_install_command[@]}"; then
-    if [[ "${legacy_formula_unlinked}" -eq 1 ]]; then
-      brew link "${_CIRCLECI_LEGACY_FORMULA}" || true
+    if ! restore_legacy_circleci; then
+      >&2 echo "The previous CircleCI CLI could not be restored."
     fi
     >&2 echo "Failed to install ${_CIRCLECI_CASK}."
     exit 1
@@ -62,8 +70,8 @@ function ensure_circleci_v1 {
   prefer_homebrew_circleci
 
   if ! is_circleci_v1; then
-    if [[ "${legacy_formula_unlinked}" -eq 1 ]]; then
-      brew link "${_CIRCLECI_LEGACY_FORMULA}" || true
+    if ! restore_legacy_circleci; then
+      >&2 echo "The previous CircleCI CLI could not be restored."
     fi
     >&2 echo "Installed ${_CIRCLECI_CASK}, but PATH still resolves to a non-1.x circleci ($(command -v circleci 2>/dev/null || echo 'not found'))."
     >&2 echo "Ensure the cask's binary is available on PATH, or uninstall the conflicting circleci installation."
