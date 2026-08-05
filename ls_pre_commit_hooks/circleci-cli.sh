@@ -19,7 +19,8 @@ function prefer_homebrew_circleci {
 
 function restore_legacy_circleci {
   [[ "${legacy_formula_unlinked}" -eq 1 ]] || return 0
-  if brew list --cask --versions "${_CIRCLECI_CASK_TOKEN}" &>/dev/null \
+  if [[ "${cask_preexisting}" -eq 0 ]] \
+    && brew list --cask --versions "${_CIRCLECI_CASK_TOKEN}" &>/dev/null \
     && ! brew uninstall --cask --force "${_CIRCLECI_CASK_TOKEN}"; then
     >&2 echo "Failed to remove the ${_CIRCLECI_CASK} cask link."
     return 1
@@ -59,7 +60,9 @@ function ensure_circleci_v1 {
     fi
   fi
 
+  cask_preexisting=0
   if brew list --cask --versions "${_CIRCLECI_CASK_TOKEN}" &>/dev/null; then
+    cask_preexisting=1
     cask_install_command=(brew reinstall --cask "${_CIRCLECI_CASK}")
   else
     cask_install_command=(brew install --cask "${_CIRCLECI_CASK}")
