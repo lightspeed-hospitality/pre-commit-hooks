@@ -30,6 +30,6 @@ if [[ -e "${_PATH}" ]]; then
   cp -p "${_PATH}" "${tmp_path}"
 fi
 
-circleci config pack .circleci > "${tmp_path}"
+circleci config pack .circleci/config > "${tmp_path}"
 mv "${tmp_path}" "${_PATH}"
 trap - EXIT
