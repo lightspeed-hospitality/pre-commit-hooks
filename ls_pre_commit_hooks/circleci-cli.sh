@@ -19,6 +19,11 @@ function prefer_homebrew_circleci {
 
 function restore_legacy_circleci {
   [[ "${legacy_formula_unlinked}" -eq 1 ]] || return 0
+  if brew list --cask --versions "${_CIRCLECI_CASK_TOKEN}" &>/dev/null \
+    && ! brew uninstall --cask --force "${_CIRCLECI_CASK_TOKEN}"; then
+    >&2 echo "Failed to remove the ${_CIRCLECI_CASK} cask link."
+    return 1
+  fi
   if ! brew link "${_CIRCLECI_LEGACY_FORMULA}"; then
     >&2 echo "Failed to restore the ${_CIRCLECI_LEGACY_FORMULA} formula link."
     return 1
