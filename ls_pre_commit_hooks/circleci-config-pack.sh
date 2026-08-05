@@ -1,28 +1,35 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 
-_PATH=$1
-if [ -z "${_PATH}" ]; then
-  _PATH=.circleci/config.yml
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# shellcheck source=ls_pre_commit_hooks/circleci-cli.sh
+source "${BASH_SOURCE[0]%/*}/circleci-cli.sh"
+
+_PATH="${1:-.circleci/config.yml}"
+
+# Do not run in CircleCI.
+if [[ -n "${CI:-}" ]]; then
+  echo "Skipping config packing when running in CI."
+  exit 0
 fi
 
-# do not run in Circle CI
-if [[ -n $CIRCLECI ]]; then
-  echo "Only to be executed locally, as a pre-commit hook."
-  exit 0;
+DEBUG="${DEBUG:=0}"
+[[ "${DEBUG}" -eq 1 ]] && set -o xtrace
+
+echo "Begin circleci config packing"
+
+ensure_circleci_v1
+
+# Pack into a temporary file so a failed pack cannot replace a valid config.
+tmp_path="$(mktemp "${_PATH}.tmp.XXXXXX")"
+trap 'rm -f "${tmp_path}"' EXIT
+
+if [[ -e "${_PATH}" ]]; then
+  cp -p "${_PATH}" "${tmp_path}"
 fi
 
-DEBUG=${DEBUG:=0}
-[[ $DEBUG -eq 1 ]] && set -o xtrace
-
-echo 'Begin circleci config packing'
-
-if ! command -v circleci &>/dev/null; then
-  if command -v brew &>/dev/null; then
-    brew install circleci
-  else
-    >&2 echo 'circleci command not found. See https://circleci.com/docs/2.0/local-cli/ for installation instructions.'
-  fi
-  exit 1
-fi
-
-circleci --skip-update-check config pack .circleci/config > "${_PATH}"
+circleci config pack .circleci > "${tmp_path}"
+mv "${tmp_path}" "${_PATH}"
+trap - EXIT
