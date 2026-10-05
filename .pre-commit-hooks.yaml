@@ -43,7 +43,7 @@
   name: ruff
   description: ruff - Python linting
   language: python
-  entry: ruff --fix
+  entry: ruff check --fix
   files: \.py$
 - id: ruff-format
   name: ruff-format
