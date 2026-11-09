@@ -5,16 +5,21 @@
 
 setup() {
   ROOT_DIR="$(cd "${BATS_TEST_DIRNAME}/.." && pwd)"
-  TEST_BIN="${BATS_TEST_TMPDIR}/bin"
+  TEST_TMPDIR="$(mktemp -d "${TMPDIR:-/tmp}/circleci-cli-tests.XXXXXX")"
+  TEST_BIN="${TEST_TMPDIR}/bin"
   mkdir -p "${TEST_BIN}"
 
   export PATH="${TEST_BIN}:/usr/bin:/bin"
   export CIRCLECI_TEST_VERSION=""
-  export CIRCLECI_TEST_ARGS_LOG="${BATS_TEST_TMPDIR}/circleci-args"
-  export CIRCLECI_TEST_BREW_PREFIX="${BATS_TEST_TMPDIR}/brew"
-  export CIRCLECI_TEST_BREW_LOG="${BATS_TEST_TMPDIR}/brew-args"
+  export CIRCLECI_TEST_ARGS_LOG="${TEST_TMPDIR}/circleci-args"
+  export CIRCLECI_TEST_BREW_PREFIX="${TEST_TMPDIR}/brew"
+  export CIRCLECI_TEST_BREW_LOG="${TEST_TMPDIR}/brew-args"
 
   source "${ROOT_DIR}/ls_pre_commit_hooks/circleci-cli.sh"
+}
+
+teardown() {
+  rm -rf "${TEST_TMPDIR}"
 }
 
 write_fake_circleci() {
