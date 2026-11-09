@@ -9,33 +9,18 @@ setup() {
   mkdir -p "${TEST_BIN}"
 
   export PATH="${TEST_BIN}:/usr/bin:/bin"
-  export CIRCLECI_INSTALL_DIR="${BATS_TEST_TMPDIR}/install"
-  export CIRCLECI_TEST_OS="Darwin"
-  export CIRCLECI_TEST_ARCH="arm64"
   export CIRCLECI_TEST_VERSION=""
-  export CIRCLECI_TEST_URL_LOG="${BATS_TEST_TMPDIR}/download-url"
-
-  cat > "${TEST_BIN}/uname" <<'EOF'
-#!/bin/sh
-case "$1" in
-  -s) printf '%s\n' "${CIRCLECI_TEST_OS}" ;;
-  -m) printf '%s\n' "${CIRCLECI_TEST_ARCH}" ;;
-  *) exit 1 ;;
-esac
-EOF
-  chmod +x "${TEST_BIN}/uname"
-
-  cat > "${TEST_BIN}/curl" <<'EOF'
-#!/bin/sh
-exit 99
-EOF
-  chmod +x "${TEST_BIN}/curl"
+  export CIRCLECI_TEST_ARGS_LOG="${BATS_TEST_TMPDIR}/circleci-args"
+  export CIRCLECI_TEST_BREW_PREFIX="${BATS_TEST_TMPDIR}/brew"
+  export CIRCLECI_TEST_BREW_LOG="${BATS_TEST_TMPDIR}/brew-args"
 
   source "${ROOT_DIR}/ls_pre_commit_hooks/circleci-cli.sh"
 }
 
 write_fake_circleci() {
-  cat > "${TEST_BIN}/circleci" <<'EOF'
+  local destination="$1"
+  mkdir -p "$(dirname "${destination}")"
+  cat >"${destination}" <<'EOF'
 #!/bin/sh
 if [ "$1" = version ]; then
   printf '%s\n' "${CIRCLECI_TEST_VERSION}"
@@ -50,171 +35,80 @@ if [ "${CIRCLECI_TEST_FAIL:-0}" = 1 ]; then
 fi
 exit 0
 EOF
-  chmod +x "${TEST_BIN}/circleci"
+  chmod +x "${destination}"
 }
 
-stub_release_download() {
-  local archive="$1"
-
-  cat > "${TEST_BIN}/curl" <<'EOF'
+stub_homebrew_install() {
+  cat >"${TEST_BIN}/brew" <<'EOF'
 #!/bin/sh
-output=
-url=
-while [ "$#" -gt 0 ]; do
-  case "$1" in
-    --output)
-      output="$2"
-      shift 2
-      ;;
-    https://*)
-      url="$1"
-      shift
-      ;;
-    *) shift ;;
-  esac
-done
-printf '%s\n' "${url}" > "${CIRCLECI_TEST_URL_LOG}"
-if [ "${CIRCLECI_TEST_CURL_FAIL:-0}" = 1 ]; then
-  exit 22
-fi
-cp "${CIRCLECI_TEST_ARCHIVE}" "${output}"
-EOF
-  chmod +x "${TEST_BIN}/curl"
-  export CIRCLECI_TEST_ARCHIVE="${archive}"
-  export CIRCLECI_TEST_URL_LOG="${BATS_TEST_TMPDIR}/download-url"
-}
-
-make_test_archive() {
-  local fixture_dir="${BATS_TEST_TMPDIR}/fixture"
-  mkdir -p "${fixture_dir}"
-  cat > "${fixture_dir}/circleci" <<'EOF'
+case "$1" in
+  install)
+    printf '%s\n' "$*" > "${CIRCLECI_TEST_BREW_LOG}"
+    write_target="${CIRCLECI_TEST_BREW_PREFIX}/bin/circleci"
+    mkdir -p "$(dirname "${write_target}")"
+    cat > "${write_target}" <<'CIRCLECI'
 #!/bin/sh
 if [ "$1" = version ]; then
   printf '%s\n' 'circleci 1.14.0 (test)'
 fi
+CIRCLECI
+    chmod +x "${write_target}"
+    ;;
+  --prefix) printf '%s\n' "${CIRCLECI_TEST_BREW_PREFIX}" ;;
+  *) exit 1 ;;
+esac
 EOF
-  chmod +x "${fixture_dir}/circleci"
-  tar -czf "${BATS_TEST_TMPDIR}/circleci-fixture.tar.gz" -C "${fixture_dir}" circleci
+  chmod +x "${TEST_BIN}/brew"
 }
 
-@test "an existing pinned CLI is kept without warning or install" {
-  export CIRCLECI_TEST_VERSION='circleci 1.14.0 (test)'
-  write_fake_circleci
-
-  run ensure_circleci_cli
-
-  [ "${status}" -eq 0 ]
-  [[ "${output}" != *'Warning:'* ]]
-  [ ! -e "${CIRCLECI_INSTALL_DIR}/circleci" ]
-}
-
-@test "an existing legacy CLI is kept and warns instead of installing" {
-  export CIRCLECI_TEST_OS='Linux'
+@test "an existing CLI is kept and warns instead of being replaced" {
   export CIRCLECI_TEST_VERSION='0.1.34283+28a3be8 (release)'
-  write_fake_circleci
+  write_fake_circleci "${TEST_BIN}/circleci"
+  stub_homebrew_install
 
   run ensure_circleci_cli
 
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *'existing CircleCI CLI'* ]]
+  [[ "${output}" == *'using existing CircleCI CLI'* ]]
   [[ "${output}" == *'will not be replaced'* ]]
-  [ ! -e "${CIRCLECI_INSTALL_DIR}/circleci" ]
+  [ ! -e "${CIRCLECI_TEST_BREW_LOG}" ]
 }
 
-@test "a different 1.x CLI is kept and warns instead of installing" {
-  export CIRCLECI_TEST_VERSION='circleci 1.13.0 (test)'
-  write_fake_circleci
+@test "a missing CLI is installed with the official Homebrew command" {
+  stub_homebrew_install
 
-  run ensure_circleci_cli
+  ensure_circleci_cli
 
-  [ "${status}" -eq 0 ]
-  [[ "${output}" == *'pinned installer version is 1.14.0'* ]]
-  [ ! -e "${CIRCLECI_INSTALL_DIR}/circleci" ]
+  [ "$(cat "${CIRCLECI_TEST_BREW_LOG}")" = 'install circleci' ]
+  [ -x "${CIRCLECI_TEST_BREW_PREFIX}/bin/circleci" ]
+  [ "$(circleci version)" = 'circleci 1.14.0 (test)' ]
 }
 
-@test "pins official release assets and published archive checksums" {
-  [ "$(circleci_release_asset darwin amd64)" = 'circleci-cli_1.14.0_darwin_amd64.tar.gz' ]
-  [ "$(circleci_release_sha256 darwin amd64)" = 'a295caffc6ce879179f394c21df7775cbe286ad5bfe0fc003903d84065989145' ]
-  [ "$(circleci_release_asset darwin arm64)" = 'circleci-cli_1.14.0_darwin_arm64.tar.gz' ]
-  [ "$(circleci_release_sha256 darwin arm64)" = 'ae3a9d0399bafc9169a6fca7bced2e0a35a51e1e870d6efc56955cb99b29941b' ]
-  [ "$(circleci_release_asset linux amd64)" = 'circleci-cli_1.14.0_linux_amd64.tar.gz' ]
-  [ "$(circleci_release_sha256 linux amd64)" = '5d0227b38ad65b2fb23ef1fbebfe98851c77102f76a72df2273eacca941665c4' ]
-  [ "$(circleci_release_asset linux arm64)" = 'circleci-cli_1.14.0_linux_arm64.tar.gz' ]
-  [ "$(circleci_release_sha256 linux arm64)" = 'd1cfb57078bcd0d3ff4c20f2765574e1f1022a3ba41cf164acd36a521a7a35f0' ]
-}
-
-@test "a missing CLI is installed from its pinned archive without fetching a checksum manifest" {
-  make_test_archive
-  stub_release_download "${BATS_TEST_TMPDIR}/circleci-fixture.tar.gz"
-  CIRCLECI_TEST_EXPECTED_CHECKSUM="$(shasum -a 256 "${CIRCLECI_TEST_ARCHIVE}" | cut -d ' ' -f1)"
-  export CIRCLECI_TEST_EXPECTED_CHECKSUM
-  # The installer calls this helper indirectly; use a real digest for the fixture archive.
-  # shellcheck disable=SC2329
-  circleci_release_sha256() { printf '%s\n' "${CIRCLECI_TEST_EXPECTED_CHECKSUM}"; }
-
-  run ensure_circleci_cli
-
-  [ "${status}" -eq 0 ]
-  [ -x "${CIRCLECI_INSTALL_DIR}/circleci" ]
-  [[ "$(cat "${CIRCLECI_TEST_URL_LOG}")" == *'/v1.14.0/circleci-cli_1.14.0_darwin_arm64.tar.gz' ]]
-  [[ "$(cat "${CIRCLECI_TEST_URL_LOG}")" != *'checksums.txt'* ]]
-  [ "$("${CIRCLECI_INSTALL_DIR}/circleci" version)" = 'circleci 1.14.0 (test)' ]
-}
-
-@test "a missing CLI on Linux selects the matching pinned release asset" {
-  export CIRCLECI_TEST_OS='Linux'
-  export CIRCLECI_TEST_ARCH='x86_64'
-  make_test_archive
-  stub_release_download "${BATS_TEST_TMPDIR}/circleci-fixture.tar.gz"
-  CIRCLECI_TEST_EXPECTED_CHECKSUM="$(shasum -a 256 "${CIRCLECI_TEST_ARCHIVE}" | cut -d ' ' -f1)"
-  export CIRCLECI_TEST_EXPECTED_CHECKSUM
-  circleci_release_sha256() { printf '%s\n' "${CIRCLECI_TEST_EXPECTED_CHECKSUM}"; }
-
-  run ensure_circleci_cli
-
-  [ "${status}" -eq 0 ]
-  [[ "$(cat "${CIRCLECI_TEST_URL_LOG}")" == *'/v1.14.0/circleci-cli_1.14.0_linux_amd64.tar.gz' ]]
-  [ -x "${CIRCLECI_INSTALL_DIR}/circleci" ]
-}
-
-@test "a failed download does not install a CLI" {
-  make_test_archive
-  stub_release_download "${BATS_TEST_TMPDIR}/circleci-fixture.tar.gz"
-  export CIRCLECI_TEST_CURL_FAIL=1
+@test "a Homebrew install failure is reported" {
+  cat >"${TEST_BIN}/brew" <<'EOF'
+#!/bin/sh
+exit 1
+EOF
+  chmod +x "${TEST_BIN}/brew"
 
   run ensure_circleci_cli
 
   [ "${status}" -ne 0 ]
-  [[ "${output}" == *'Failed to download CircleCI CLI'* ]]
-  [ ! -e "${CIRCLECI_INSTALL_DIR}/circleci" ]
+  [[ "${output}" == *'Failed to install CircleCI CLI with Homebrew.'* ]]
 }
 
-@test "a missing CLI is not installed when archive checksum verification fails" {
-  make_test_archive
-  stub_release_download "${BATS_TEST_TMPDIR}/circleci-fixture.tar.gz"
-
+@test "a missing Homebrew installation fails with the official install guidance" {
   run ensure_circleci_cli
 
   [ "${status}" -ne 0 ]
-  [[ "${output}" == *'Checksum verification failed'* ]]
-  [ ! -e "${CIRCLECI_INSTALL_DIR}/circleci" ]
-}
-
-@test "unsupported platforms fail before attempting a download" {
-  export CIRCLECI_TEST_OS='FreeBSD'
-
-  run ensure_circleci_cli
-
-  [ "${status}" -ne 0 ]
-  [[ "${output}" == *'unsupported on FreeBSD'* ]]
-  [ ! -e "${CIRCLECI_TEST_URL_LOG}" ]
+  [[ "${output}" == *'Homebrew is required'* ]]
+  [[ "${output}" == *'https://cli.circleci.com/'* ]]
 }
 
 @test "legacy validation uses flags supported by the stable CLI" {
   export CIRCLECI_TEST_VERSION='0.1.34283+28a3be8 (release)'
-  export CIRCLECI_TEST_ARGS_LOG="${BATS_TEST_TMPDIR}/circleci-args"
   unset CI
-  write_fake_circleci
+  write_fake_circleci "${TEST_BIN}/circleci"
 
   run "${ROOT_DIR}/ls_pre_commit_hooks/circleci-config-validate.sh" 'config.yml'
 
@@ -231,11 +125,10 @@ EOF
   [ "${status}" -ne 0 ]
 }
 
-@test "1.x validation uses flags supported by the preview CLI" {
+@test "1.x validation uses flags supported by the current CLI" {
   export CIRCLECI_TEST_VERSION='circleci 1.14.0 (test)'
-  export CIRCLECI_TEST_ARGS_LOG="${BATS_TEST_TMPDIR}/circleci-args"
   unset CI
-  write_fake_circleci
+  write_fake_circleci "${TEST_BIN}/circleci"
 
   run "${ROOT_DIR}/ls_pre_commit_hooks/circleci-config-validate.sh" 'config.yml'
 
@@ -254,7 +147,7 @@ EOF
   export CIRCLECI_TEST_FAIL=1
   export CIRCLECI_TEST_ERROR='pipeline config is invalid at line 3'
   unset CI
-  write_fake_circleci
+  write_fake_circleci "${TEST_BIN}/circleci"
 
   run "${ROOT_DIR}/ls_pre_commit_hooks/circleci-config-validate.sh" 'config.yml'
 
