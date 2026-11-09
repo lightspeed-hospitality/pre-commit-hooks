@@ -7,6 +7,7 @@ setup() {
   ROOT_DIR="$(cd "${BATS_TEST_DIRNAME}/.." && pwd)"
   TEST_TMPDIR="$(mktemp -d "${TMPDIR:-/tmp}/circleci-cli-tests.XXXXXX")"
   TEST_BIN="${TEST_TMPDIR}/bin"
+  TEST_SYSTEM_PATH="${PATH}"
   mkdir -p "${TEST_BIN}"
 
   export PATH="${TEST_BIN}:/usr/bin:/bin"
@@ -50,14 +51,14 @@ case "$1" in
   install)
     printf '%s\n' "$*" > "${CIRCLECI_TEST_BREW_LOG}"
     write_target="${CIRCLECI_TEST_BREW_PREFIX}/bin/circleci"
-    mkdir -p "$(dirname "${write_target}")"
-    cat > "${write_target}" <<'CIRCLECI'
+    /bin/mkdir -p "${write_target%/*}"
+    /bin/cat > "${write_target}" <<'CIRCLECI'
 #!/bin/sh
 if [ "$1" = version ]; then
   printf '%s\n' 'circleci 1.14.0 (test)'
 fi
 CIRCLECI
-    chmod +x "${write_target}"
+    /bin/chmod +x "${write_target}"
     ;;
   --prefix) printf '%s\n' "${CIRCLECI_TEST_BREW_PREFIX}" ;;
   *) exit 1 ;;
@@ -82,11 +83,14 @@ EOF
 @test "a missing CLI is installed with the official Homebrew command" {
   stub_homebrew_install
 
+  export PATH="${TEST_BIN}"
   ensure_circleci_cli
+  export PATH="${TEST_SYSTEM_PATH}"
 
   [ "$(cat "${CIRCLECI_TEST_BREW_LOG}")" = 'install circleci' ]
   [ -x "${CIRCLECI_TEST_BREW_PREFIX}/bin/circleci" ]
-  [ "$(circleci version)" = 'circleci 1.14.0 (test)' ]
+  installed_cli="${CIRCLECI_TEST_BREW_PREFIX}/bin/circleci"
+  [ "$("${installed_cli}" version)" = 'circleci 1.14.0 (test)' ]
 }
 
 @test "a Homebrew install failure is reported" {
@@ -96,14 +100,18 @@ exit 1
 EOF
   chmod +x "${TEST_BIN}/brew"
 
+  export PATH="${TEST_BIN}"
   run ensure_circleci_cli
+  export PATH="${TEST_SYSTEM_PATH}"
 
   [ "${status}" -ne 0 ]
   [[ "${output}" == *'Failed to install CircleCI CLI with Homebrew.'* ]]
 }
 
 @test "a missing Homebrew installation fails with the official install guidance" {
+  export PATH="${TEST_BIN}"
   run ensure_circleci_cli
+  export PATH="${TEST_SYSTEM_PATH}"
 
   [ "${status}" -ne 0 ]
   [[ "${output}" == *'Homebrew is required'* ]]
