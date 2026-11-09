@@ -1,0 +1,16 @@
+---
+name: Release New Version
+"on":
+  push:
+    branches:
+      - main
+jobs:
+  release:
+    permissions:
+      contents: write
+    secrets: inherit
+    uses: >-
+      lightspeed-hospitality/github-workflows/.github/workflows/semantic-release.yml@main
+    with:
+      tag_prefix: v
+      version_format: v${major}.${minor}.${patch}
