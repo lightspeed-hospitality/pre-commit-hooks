@@ -46,10 +46,14 @@ if [[ ${#positional_args[@]} -eq 0 ]]; then
   usage
 fi
 
-ensure_circleci_v1
+ensure_circleci_cli
 
 for path in "${positional_args[@]}"; do
-  cmdArgs=('--quiet' 'config' 'validate' '--config' "${path}" '--org' "${_ORG_SLUG}")
+  if is_circleci_v1; then
+    cmdArgs=('--quiet' 'config' 'validate' '--config' "${path}" '--org' "${_ORG_SLUG}")
+  else
+    cmdArgs=('config' 'validate' '--skip-update-check' '--config' "${path}" '--org-slug' "${_ORG_SLUG}")
+  fi
 
   if ! eMSG=$(circleci "${cmdArgs[@]}" 2>&1); then
     if [[ ${eMSG} =~ "Cannot find" ]] || [[ ${eMSG} =~ "Permission denied" ]]; then

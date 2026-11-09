@@ -3,6 +3,77 @@ version: 2.1
 orbs:
   lsk-python: lsk/python@2.0
 
+jobs:
+  test-circleci-hooks:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Install Bats
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y bats
+      - run:
+          name: Test CircleCI hooks
+          command: |
+            # language=sh
+            set -e
+            mkdir -p test-results
+            status=0
+            bats --tap tests/circleci-cli.bats \
+              > test-results/bats.tap || status=$?
+            awk '
+              BEGIN {
+                tests = 0
+                failures = 0
+                cases = ""
+                success_format = "  <testcase classname=\"bats\" "
+                success_format = success_format "name=\"%s\"/>\n"
+                failure_format = "  <testcase classname=\"bats\" "
+                failure_format = failure_format "name=\"%s\">"
+                failure_format = failure_format "<failure message=\"failed\"/>"
+                failure_format = failure_format "</testcase>\n"
+                suite_format = "<testsuite name=\"circleci-hooks\" "
+                suite_format = suite_format "tests=\"%d\" failures=\"%d\">\n"
+              }
+              /^ok [0-9]+ / {
+                name = $0
+                sub(/^ok [0-9]+ /, "", name)
+                gsub(/&/, "\\&amp;", name)
+                gsub(/</, "\\&lt;", name)
+                gsub(/>/, "\\&gt;", name)
+                gsub(/\"/, "\\&quot;", name)
+                cases = cases sprintf(success_format, name)
+                tests++
+              }
+              /^not ok [0-9]+ / {
+                name = $0
+                sub(/^not ok [0-9]+ /, "", name)
+                gsub(/&/, "\\&amp;", name)
+                gsub(/</, "\\&lt;", name)
+                gsub(/>/, "\\&gt;", name)
+                gsub(/\"/, "\\&quot;", name)
+                cases = cases sprintf(failure_format, name)
+                tests++
+                failures++
+              }
+              END {
+                print "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                printf suite_format, tests, failures
+                printf "%s", cases
+                print "</testsuite>"
+              }
+            ' test-results/bats.tap > test-results/junit.xml
+            cat test-results/bats.tap
+            exit "$status"
+          when: always
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          name: Bats test output
+          path: test-results
+
 workflows:
   main:
     jobs:
@@ -10,3 +81,4 @@ workflows:
           context: global
           executor-name: python
           executor-tag: "3.11"
+      - test-circleci-hooks
