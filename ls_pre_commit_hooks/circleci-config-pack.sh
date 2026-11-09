@@ -20,7 +20,7 @@ DEBUG="${DEBUG:=0}"
 
 echo "Begin circleci config packing"
 
-ensure_circleci_v1
+ensure_circleci_cli
 
 # Pack into a temporary file so a failed pack cannot replace a valid config.
 tmp_path="$(mktemp "${_PATH}.tmp.XXXXXX")"
