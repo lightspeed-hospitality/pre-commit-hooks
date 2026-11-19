@@ -8,8 +8,11 @@ TIDY_CACHE_DIR="${PRE_COMMIT_HOME:-${XDG_CACHE_HOME:-${HOME}/.cache}/pre-commit}
 
 # Extracts the release package instead of installing it, so it needs no sudo and no apt-get update.
 install_tidy_release() {
-  local tmp_dir
-  tmp_dir=$(mktemp -d)
+  local cache_parent tmp_dir
+  cache_parent=$(dirname "${TIDY_CACHE_DIR}")
+  # Same filesystem as the cache, so publishing it below is an atomic rename.
+  mkdir -p "${cache_parent}" &&
+    tmp_dir=$(mktemp -d "${cache_parent}/.tidy-${TIDY_VERSION}.XXXXXX") || return 1
   echo "...downloading ${TIDY_DEB_URL}"
   if ! curl --silent --show-error --fail --location \
     --connect-timeout 10 --max-time 60 --retry 3 --retry-delay 1 \
@@ -22,10 +25,9 @@ install_tidy_release() {
     rm -rf "${tmp_dir}"
     return 1
   fi
+  # mv -T fails instead of replacing the cache when a concurrent run already published it; that copy is then used.
   dpkg-deb -x "${tmp_dir}/tidy.deb" "${tmp_dir}/extracted" &&
-    mkdir -p "$(dirname "${TIDY_CACHE_DIR}")" &&
-    rm -rf "${TIDY_CACHE_DIR}" &&
-    mv "${tmp_dir}/extracted" "${TIDY_CACHE_DIR}"
+    { mv -T "${tmp_dir}/extracted" "${TIDY_CACHE_DIR}" 2>/dev/null || [[ -x "${TIDY_CMD}" ]]; }
   local result=$?
   rm -rf "${tmp_dir}"
   return ${result}
